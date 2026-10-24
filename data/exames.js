@@ -2,6 +2,133 @@
 // Enunciados: exames oficiais (INEC/MINEDH). Resoluções: produzidas pela equipa PreparaMZ.
 window.EXAMES = [
   {
+    id: "mat-10-2025-1",
+    disciplina: "Matemática",
+    classe: "10ª Classe",
+    ano: 2025,
+    chamada: "1ª Chamada",
+    duracao: "120 Minutos",
+    totalPerguntas: 10,
+    fonteEnunciado: "Exame Final oficial ES1/2025, Instituto Nacional de Exames, Certificação e Equivalências (Moçambique)",
+    perguntas: [
+      {
+        numero: 1, cotacao: "",
+        enunciado: "Numa pesquisa com 300 pessoas sobre hábitos alimentares, foram obtidos os seguintes dados: 210 pessoas consomem fruta diariamente; 180 consomem legumes diariamente; 150 consomem cereais diariamente; 135 consomem fruta e legumes; 120 consomem fruta e cereais; 105 consomem legumes e cereais; 90 consomem os três tipos de alimentos.\na) Represente essa situação num diagrama de Venn.\nb) Quantas pessoas não consomem nenhum dos três tipos de alimentos diariamente?",
+        passos: [
+          "Começa pelo centro do diagrama: coloca 90 no cruzamento dos três círculos (quem consome os três alimentos).",
+          "Regiões de apenas dois alimentos: fruta e legumes = 135 − 90 = 45; fruta e cereais = 120 − 90 = 30; legumes e cereais = 105 − 90 = 15.",
+          "Regiões de apenas um alimento: só fruta = 210 − (90 + 45 + 30) = 45; só legumes = 180 − (90 + 45 + 15) = 30; só cereais = 150 − (90 + 30 + 15) = 15.",
+          "Soma todas as regiões do diagrama: 90 + 45 + 30 + 15 + 45 + 30 + 15 = 270 pessoas consomem pelo menos um dos alimentos.",
+          "Como foram entrevistadas 300 pessoas: 300 − 270 = 30 não consomem nenhum dos três."
+        ],
+        resposta: "Diagrama — centro: 90; só fruta+legumes: 45; só fruta+cereais: 30; só legumes+cereais: 15; só fruta: 45; só legumes: 30; só cereais: 15.  b) 30 pessoas não consomem nenhum dos três alimentos."
+      },
+      {
+        numero: 2, cotacao: "",
+        enunciado: "Dados os quadrados A e B, com áreas representadas por A(x) = 4x⁴ − 35x² e B(x) = x², respectivamente, onde x representa a medida do lado, determine o valor de x de modo que as áreas sejam iguais.",
+        passos: [
+          "Áreas iguais significa A(x) = B(x): 4x⁴ − 35x² = x².",
+          "Passa tudo para o primeiro membro: 4x⁴ − 36x² = 0.",
+          "Factoriza pondo 4x² em evidência: 4x²(x² − 9) = 0.",
+          "Produto nulo: 4x² = 0 → x = 0; ou x² − 9 = 0 → x = 3 ou x = −3.",
+          "Interpreta no contexto: x é a medida de um lado, por isso não pode ser 0 nem negativo."
+        ],
+        resposta: "x = 3"
+      },
+      {
+        numero: 3, cotacao: "",
+        enunciado: "Dado o gráfico da função (curva decrescente que passa pela origem e pelo ponto (−2, 3) e se aproxima da recta y = −1 sem a tocar), indique:\na) o contradomínio;\nb) a ordenada na origem;\nc) o zero da função, se existir;\nd) a monotonia.",
+        passos: [
+          "Observa o gráfico: a curva desce da esquerda para a direita, passa por (0, 0) e por (−2, 3), e aproxima-se da recta y = −1 sem nunca a tocar (assíntota horizontal).",
+          "a) O contradomínio lê-se no eixo y: os valores vão de logo acima de −1 até +∞.",
+          "b) A ordenada na origem é o valor de y onde o gráfico corta o eixo vertical: corta em y = 0.",
+          "c) O zero da função é onde o gráfico corta o eixo x: corta em x = 0, logo o zero é 0.",
+          "d) Quando x aumenta, y diminui sempre: a função é decrescente em todo o seu domínio."
+        ],
+        resposta: "a) CD(f) = ]−1, +∞[  ·  b) ordenada na origem: 0  ·  c) zero: x = 0  ·  d) decrescente em todo o domínio"
+      },
+      {
+        numero: 4, cotacao: "",
+        enunciado: "Dada a inequação −x² + 6x − 10 < 0:\na) esboce o gráfico da função quadrática associada f(x);\nb) determine o conjunto solução da inequação.",
+        passos: [
+          "Função associada: f(x) = −x² + 6x − 10, com a = −1, b = 6 e c = −10.",
+          "Como a < 0, a parábola tem a concavidade voltada para baixo.",
+          "Discriminante: Δ = 6² − 4 × (−1) × (−10) = 36 − 40 = −4 < 0. A função não tem raízes reais: a parábola não corta o eixo x.",
+          "Vértice: xᵥ = −b/(2a) = −6/(−2) = 3; yᵥ = f(3) = −9 + 18 − 10 = −1. Vértice V(3, −1). O gráfico corta o eixo y em (0, −10).",
+          "Esboço: parábola virada para baixo, com o ponto mais alto em (3, −1), inteiramente abaixo do eixo x.",
+          "Como o valor máximo da função é −1 (negativo), f(x) < 0 para todos os valores reais de x."
+        ],
+        resposta: "a) Parábola de concavidade para baixo, vértice (3, −1), sem zeros reais, corta y em −10.  b) S = ℝ"
+      },
+      {
+        numero: 5, cotacao: "",
+        enunciado: "Um triângulo rectângulo tem um cateto de 5 cm de comprimento e um ângulo de 60°, oposto a esse cateto. Qual é o comprimento da hipotenusa?",
+        passos: [
+          "Conhecemos o cateto oposto ao ângulo de 60° (5 cm) e queremos a hipotenusa: usa-se o seno.",
+          "sen 60° = cateto oposto / hipotenusa → sen 60° = 5 / h.",
+          "Como sen 60° = √3/2: h = 5 ÷ (√3/2) = 10/√3.",
+          "Racionalizando: h = 10√3/3 ≈ 5,77 cm."
+        ],
+        resposta: "A hipotenusa mede 10√3/3 cm ≈ 5,77 cm"
+      },
+      {
+        numero: 6, cotacao: "",
+        enunciado: "As idades de 18 alunos da 10ª classe são: 15, 16, 15, 17, 16, 15, 16, 17, 15, 16, 15, 17, 16, 15, 16, 17, 15, 16.\na) Construa uma tabela de frequências (absoluta e relativa) para as idades.\nb) Qual é a idade mediana dos alunos?",
+        passos: [
+          "Conta quantos alunos têm cada idade: 15 anos → 7 alunos; 16 anos → 7 alunos; 17 anos → 4 alunos (total: 18).",
+          "Frequência relativa = frequência absoluta ÷ 18: 7/18 ≈ 0,39 (15 e 16 anos); 4/18 ≈ 0,22 (17 anos). A soma das relativas dá 1.",
+          "Para a mediana, ordena as idades: sete 15, sete 16, quatro 17. Com 18 dados (número par), a mediana é a média dos valores das posições 9 e 10.",
+          "A posição 9 vale 16 e a posição 10 vale 16, logo a mediana é (16 + 16) / 2 = 16."
+        ],
+        resposta: "a) 15 anos: f = 7, fr ≈ 0,39 · 16 anos: f = 7, fr ≈ 0,39 · 17 anos: f = 4, fr ≈ 0,22  ·  b) Idade mediana: 16 anos"
+      },
+      {
+        numero: 7, cotacao: "",
+        enunciado: "Calcule o valor de p na equação x² − px + 24 = 0, de modo que a soma das raízes seja 2/3.",
+        passos: [
+          "Na equação ax² + bx + c = 0, a soma das raízes é dada por −b/a (relações de Girard).",
+          "Aqui a = 1, b = −p e c = 24, por isso a soma das raízes é −(−p)/1 = p.",
+          "Impõe a condição do enunciado: p = 2/3."
+        ],
+        resposta: "p = 2/3"
+      },
+      {
+        numero: 8, cotacao: "",
+        enunciado: "Quais das seguintes funções são quadráticas?\nA. f(x) = 9 − 4x\nB. g(x) = 4x² + 2x − 7\nC. h(x) = √x + x²\nD. f(x) = −5x²",
+        passos: [
+          "Uma função é quadrática quando pode ser escrita na forma ax² + bx + c, com a ≠ 0 (polinómio de grau 2).",
+          "A: o maior grau é 1 → é uma função afim, não é quadrática.",
+          "B: tem a forma completa, com a = 4 ≠ 0 → é quadrática.",
+          "C: contém √x, que não é um termo polinomial → não é quadrática, apesar de aparecer x².",
+          "D: é da forma ax², com a = −5 ≠ 0 (b = 0 e c = 0) → é quadrática."
+        ],
+        resposta: "São quadráticas as funções B e D"
+      },
+      {
+        numero: 9, cotacao: "",
+        enunciado: "Encontre a expressão analítica da função quadrática cujo gráfico tem zeros em −3 e 1 e passa pelo ponto (2, −5).",
+        passos: [
+          "Com os zeros conhecidos, usa a forma factorizada: f(x) = a(x − x₁)(x − x₂) = a(x + 3)(x − 1).",
+          "Usa o ponto (2, −5): quando x = 2, f(x) = −5 → −5 = a(2 + 3)(2 − 1) = a × 5 × 1 = 5a.",
+          "Logo a = −5 / 5 = −1.",
+          "Substitui e desenvolve: f(x) = −(x + 3)(x − 1) = −(x² + 2x − 3) = −x² − 2x + 3.",
+          "Verificação: f(2) = −4 − 4 + 3 = −5 ✓; f(−3) = −9 + 6 + 3 = 0 ✓; f(1) = −1 − 2 + 3 = 0 ✓."
+        ],
+        resposta: "f(x) = −x² − 2x + 3"
+      },
+      {
+        numero: 10, cotacao: "",
+        enunciado: "Simplifique log₆36 + log₆1.",
+        passos: [
+          "Calcula cada logaritmo pela definição: log₆36 = 2, porque 6² = 36.",
+          "log₆1 = 0, porque qualquer base elevada a 0 dá 1 (6⁰ = 1).",
+          "Soma os resultados: 2 + 0 = 2."
+        ],
+        resposta: "log₆36 + log₆1 = 2"
+      }
+    ]
+  },
+  {
     id: "mat-10-2024-1",
     disciplina: "Matemática",
     classe: "10ª Classe",
@@ -125,7 +252,6 @@ window.EXAMES = [
 
 // Exames em produção (aparecem na lista, ainda sem conteúdo)
 window.EM_BREVE = [
-  { disciplina: "Matemática", classe: "10ª Classe", ano: 2025, chamada: "1ª Chamada" },
   { disciplina: "Matemática", classe: "10ª Classe", ano: 2023, chamada: "1ª Chamada" },
   { disciplina: "Matemática", classe: "10ª Classe", ano: 2022, chamada: "1ª Chamada" },
   { disciplina: "Matemática", classe: "10ª Classe", ano: 2020, chamada: "1ª Chamada" },

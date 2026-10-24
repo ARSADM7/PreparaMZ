@@ -81,7 +81,7 @@ function desenharExame() {
   if (abaActual === "enunciado") {
     corpo = e.perguntas.map(p => `
       <article class="pergunta">
-        <div class="cab"><span class="num">Pergunta ${p.numero}</span><span class="cot">Cotação: ${esc(p.cotacao)} valores</span></div>
+        <div class="cab"><span class="num">Pergunta ${p.numero}</span>${p.cotacao ? `<span class="cot">Cotação: ${esc(p.cotacao)} valores</span>` : ""}</div>
         <div class="enunciado">${esc(p.enunciado)}</div>
       </article>`).join("") +
       `<p class="aviso">Fonte: ${esc(e.fonteEnunciado)}. Duração: ${esc(e.duracao)}.</p>`;
