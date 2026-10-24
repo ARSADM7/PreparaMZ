@@ -90,7 +90,7 @@ function desenharExame() {
   const e = exameActual;
   let corpo = "";
   if (abaActual === "enunciado") {
-    corpo = e.perguntas.map(p => `
+    corpo = `<button class="botao" onclick="imprimirPDF('enunciado')">📄 Guardar enunciado em PDF (grátis)</button>` + e.perguntas.map(p => `
       <article class="pergunta">
         <div class="cab"><span class="num">Pergunta ${p.numero}</span>${p.cotacao ? `<span class="cot">Cotação: ${esc(p.cotacao)} valores</span>` : ""}</div>
         <div class="enunciado">${esc(p.enunciado)}</div>${figuraHTML(e, p, "enunciado")}
@@ -114,6 +114,7 @@ function desenharExame() {
       </article>`;
     }).join("");
     if (!livre) corpo = caixaCodigo() + corpo;
+    else corpo = `<button class="botao" onclick="imprimirPDF('resolvido')">📄 Guardar resolução em PDF</button>` + corpo;
   }
   app.innerHTML = `
     <button class="voltar" onclick="vistaInicial()">← Todos os exames</button>
@@ -153,6 +154,34 @@ async function tentarDesbloquear() {
   } else {
     msg.innerHTML = '<span class="msg-erro">Código inválido. Confere as letras e tenta de novo.</span>';
   }
+}
+
+
+// ---------- PDF (guardar enunciado / resolução como PDF) ----------
+function imprimirPDF(tipo) {
+  const e = exameActual;
+  if (!e) return;
+  if (tipo === "resolvido" && !temAcesso()) return;
+  const titulo = `${e.disciplina} ${e.ano} — ${e.chamada}`;
+  const subtitulo = tipo === "resolvido" ? "Resolução passo a passo" : "Enunciado (por resolver)";
+  const meta = `${e.classe} · Exame Final${e.duracao ? " · " + e.duracao : ""} · ${e.totalPerguntas} perguntas`;
+  const partes = e.perguntas.map(p => {
+    const cab = `<h3>Pergunta ${p.numero}${p.cotacao ? ` <span class="pcot">(Cotação: ${esc(p.cotacao)} valores)</span>` : ""}</h3>`;
+    const enun = `<p class="penun">${esc(p.enunciado)}</p>` + figuraHTML(e, p, "enunciado");
+    if (tipo === "enunciado") return `<div class="pq">${cab}${enun}</div>`;
+    const passos = p.passos.map(x => `<li>${esc(x)}</li>`).join("");
+    return `<div class="pq">${cab}${enun}${figuraHTML(e, p, "resolucao")}<ol>${passos}</ol><p class="presp"><strong>Resposta:</strong> ${esc(p.resposta)}</p></div>`;
+  }).join("");
+  document.getElementById("print-area").innerHTML = `
+    <div class="pdoc">
+      <div class="pmarca">📚 PreparaMZ — Exames Resolvidos de Moçambique</div>
+      <h1>${esc(titulo)}</h1>
+      <p class="psub">${subtitulo}</p>
+      <p class="pmeta">${esc(meta)}</p>
+      ${partes}
+      <p class="pfoot">Enunciado: exame oficial (INEC/MINEDH). Resoluções: equipa PreparaMZ. · PreparaMZ — acesso completo por ${CONFIG.preco} no WhatsApp.</p>
+    </div>`;
+  window.print();
 }
 
 // PWA: service worker (offline)

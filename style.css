@@ -49,3 +49,23 @@ h2.titulo-seccao{font-size:1.05rem;margin:1.2rem 0 .6rem}
 /* Figuras (imagens) das perguntas */
 .figura { margin-top: .6rem; background: #fff; border: 1px solid #dbe7dd; border-radius: 10px; padding: .55rem; text-align: center; }
 .figura svg { max-width: 100%; height: auto; }
+
+/* ===== Área de impressão / PDF ===== */
+#print-area { display: none; }
+@media print {
+  body > header, body > main, body > footer { display: none !important; }
+  #print-area { display: block !important; }
+  .pdoc { font-family: Georgia, "Times New Roman", serif; color: #111; font-size: 12.5pt; line-height: 1.45; }
+  .pdoc .pmarca { font-family: Arial, sans-serif; font-weight: bold; color: #0b7a3e; font-size: 11pt; border-bottom: 2.5px solid #0b7a3e; padding-bottom: 6px; margin-bottom: 14px; }
+  .pdoc h1 { font-size: 19pt; margin: 0 0 2px; }
+  .pdoc .psub { font-size: 13.5pt; margin: 0 0 2px; color: #14532d; font-weight: bold; }
+  .pdoc .pmeta { font-size: 11pt; color: #444; margin: 0 0 16px; }
+  .pdoc .pq { page-break-inside: avoid; margin-bottom: 14px; }
+  .pdoc h3 { font-size: 13pt; margin: 0 0 4px; }
+  .pdoc .pcot { font-weight: normal; font-size: 10.5pt; color: #555; }
+  .pdoc .penun { margin: 0 0 6px; white-space: pre-wrap; }
+  .pdoc ol { margin: 4px 0 6px 18px; padding: 0; }
+  .pdoc .presp { background: #eef7f0; border-left: 4px solid #0b7a3e; padding: 6px 10px; margin: 4px 0 0; }
+  .pdoc .figura { border: none; padding: 2px 0; text-align: left; }
+  .pdoc .pfoot { margin-top: 20px; font-size: 9.5pt; color: #666; border-top: 1px solid #ccc; padding-top: 6px; }
+}
