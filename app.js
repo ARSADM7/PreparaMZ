@@ -4,13 +4,13 @@ const CONFIG = {
   // Coloca o teu número WhatsApp com indicativo, ex.: "25884XXXXXXX".
   // Enquanto estiver vazio, o botão de compra fica escondido.
   whatsapp: "258844744484",
-  mensagemCompra: "Olá! Quero comprar o acesso ao PreparaMZ (exames resolvidos da 10ª classe) por 50 MT."
+  mensagemCompra: "Olá! Quero comprar o acesso ao PreparaMZ (exames resolvidos da 9ª e 10ª classes) por 50 MT."
 };
 
 // Versão visível da app (selo no rodapé, para distinguir a versão nova de
 // cópias antigas em cache). TEM de coincidir com o CACHE em sw.js
-// ("preparamz-v10") — os dois sobem sempre juntos.
-const VERSAO_APP = "v10";
+// ("preparamz-v11") — os dois sobem sempre juntos.
+const VERSAO_APP = "v11";
 
 // Hashes SHA-256 dos códigos de desbloqueio (os códigos em claro ficam
 // no ficheiro privado do dono — nunca neste ficheiro público).
@@ -184,14 +184,28 @@ function visorPDF(url, titulo, fecharFn) {
 }
 
 // ---------- Vista inicial ----------
-function vistaInicial() {
-  actualizarEstado();
-  const prontos = window.EXAMES.map(e => `
+function cartaoProntoHTML(e) {
+  return `
     <button class="cartao cartao-exame" onclick="abrirExame('${e.id}')">
       <span><span class="nome">${esc(e.disciplina)} ${e.ano} — ${esc(e.chamada)}</span><br>
       <span class="meta">${esc(e.classe)} · ${e.totalPerguntas} perguntas · ${esc(e.duracao)}</span></span>
       <span class="selo selo-pronto">Enunciado + Resolvido</span>
-    </button>`).join("");
+    </button>`;
+}
+
+function vistaInicial() {
+  actualizarEstado();
+  // Exames prontos agrupados por classe (10ª primeiro, depois 9ª, …),
+  // preservando a ordem de window.EXAMES dentro de cada grupo.
+  const gruposProntos = [];
+  for (const e of window.EXAMES) {
+    let g = gruposProntos.find(x => x.classe === e.classe);
+    if (!g) { g = { classe: e.classe, exames: [] }; gruposProntos.push(g); }
+    g.exames.push(e);
+  }
+  const prontos = gruposProntos.map(g => `
+    <h2 class="titulo-seccao">${esc(g.classe)} — exames resolvidos · pronto agora</h2>
+    ${g.exames.map(cartaoProntoHTML).join("")}`).join("");
   const breve = window.EM_BREVE.map(e => `
     <div class="cartao cartao-exame" style="cursor:default">
       <span><span class="nome">${esc(e.disciplina)} ${e.ano} — ${esc(e.chamada)}</span><br>
@@ -206,7 +220,6 @@ function vistaInicial() {
       <h1>Exames de Moçambique resolvidos passo a passo</h1>
       <span class="preco">Acesso completo: ${CONFIG.preco}</span>
     </section>
-    <h2 class="titulo-seccao">Matemática — 10ª Classe · pronto agora</h2>
     ${prontos}
     <section class="cartao cartao-compra">
       <h2>🔓 Acesso completo — ${CONFIG.preco}</h2>
@@ -292,7 +305,7 @@ function abrirArquivoItem(classe, disciplina, i) {
       <p>${classe}ª Classe · folha de exame oficial digitalizada (INEC/MINEDH), via arquivo público mozexames.com.</p>
     </section>
     ${visorPDF(urlArquivo(x[2]), titulo, "vistaInicial()")}
-    <p class="aviso">O original é o documento oficial (enunciado), tal como foi digitalizado. As resoluções passo a passo do PreparaMZ, por agora, são só as de Matemática 10ª publicadas no topo desta página.</p>`;
+    <p class="aviso">O original é o documento oficial (enunciado), tal como foi digitalizado. Alguns destes exames já têm resolução passo a passo do PreparaMZ — vê os exames prontos no topo desta página.</p>`;
   window.scrollTo(0, 0);
 }
 
@@ -303,6 +316,10 @@ function abrirOriginalArquivo(i) {
   const lista = ((window.ARQUIVO || {})["10"] || {})["Matemática"] || [];
   const j = lista.findIndex(x => x[0] === o.ano && x[1] === o.epoca);
   if (j >= 0) abrirArquivoItem("10", "Matemática", j);
+}
+
+function iconeDisciplina(d) {
+  return { "Matemática": "🧮", "Física": "🔭", "Química": "🧪", "Biologia": "🌿", "Geografia": "🌍", "História": "🏛️", "Português": "📖", "Inglês": "🔤" }[d] || "📚";
 }
 
 // ---------- Vista de um exame (interface 2) ----------
@@ -463,14 +480,14 @@ function desenharExame() {
     <button class="voltar" onclick="vistaInicial()">← Todos os exames</button>
     <section class="cartao cabecalho-exame">
       <div class="linha-exame">
-        <div class="icone-exame">🧮</div>
+        <div class="icone-exame">${iconeDisciplina(e.disciplina)}</div>
         <div>
           <h1>${esc(e.disciplina)} ${e.ano}</h1>
           <p class="meta">${esc(e.classe)} · ${esc(e.chamada)}</p>
           <span class="selo selo-oficial">Exame oficial</span>
         </div>
       </div>
-      <p class="meta-exame">${e.totalPerguntas} perguntas · Duração: ${esc(e.duracao)} · Exame Final</p>
+      <p class="meta-exame">${e.totalPerguntas} perguntas · Duração: ${esc(e.duracao)} · ${esc(e.tipo || "Exame Final")}</p>
     </section>
     <div class="abas">
       <button class="aba ${abaActual === "perguntas" ? "activa" : ""}" onclick="mudarAba('perguntas')">Perguntas</button>
@@ -521,7 +538,7 @@ function documentoHTML(tipo) {
   const e = exameActual;
   const titulo = `${e.disciplina} ${e.ano} — ${e.chamada}`;
   const subtitulo = tipo === "resolvido" ? "Resolução passo a passo" : "Enunciado (por resolver)";
-  const meta = `${e.classe} · Exame Final${e.duracao ? " · " + e.duracao : ""} · ${e.totalPerguntas} perguntas`;
+  const meta = `${e.classe} · ${e.tipo || "Exame Final"}${e.duracao ? " · " + e.duracao : ""} · ${e.totalPerguntas} perguntas`;
   const partes = e.perguntas.map(p => {
     const cab = `<h3>Pergunta ${p.numero}${p.cotacao ? ` <span class="pcot">(Cotação: ${esc(p.cotacao)} valores)</span>` : ""}</h3>`;
     const enun = `<p class="penun">${fmt(p.enunciado)}</p>` + figuraHTML(e, p, "enunciado");
