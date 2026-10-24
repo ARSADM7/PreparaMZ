@@ -378,8 +378,6 @@ window.EXAMES = [
 
 // Exames em produção (aparecem na lista, ainda sem conteúdo)
 window.EM_BREVE = [
-  { disciplina: "Matemática", classe: "10ª Classe", ano: 2019, chamada: "1ª Época" },
-  { disciplina: "Matemática", classe: "10ª Classe", ano: 2017, chamada: "1ª Época" },
   { disciplina: "Matemática", classe: "10ª Classe", ano: 2015, chamada: "1ª Época" },
   { disciplina: "Matemática", classe: "10ª Classe", ano: 2013, chamada: "1ª Época" },
   { disciplina: "Matemática", classe: "10ª Classe", ano: 2012, chamada: "1ª e 2ª Épocas" },
