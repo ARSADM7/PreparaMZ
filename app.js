@@ -9,8 +9,8 @@ const CONFIG = {
 
 // Versão visível da app (selo no rodapé, para distinguir a versão nova de
 // cópias antigas em cache). TEM de coincidir com o CACHE em sw.js
-// ("preparamz-v9") — os dois sobem sempre juntos.
-const VERSAO_APP = "v9";
+// ("preparamz-v10") — os dois sobem sempre juntos.
+const VERSAO_APP = "v10";
 
 // Hashes SHA-256 dos códigos de desbloqueio (os códigos em claro ficam
 // no ficheiro privado do dono — nunca neste ficheiro público).
@@ -213,29 +213,96 @@ function vistaInicial() {
       <p>O enunciado de cada exame é <strong>grátis</strong>. Com o acesso completo desbloqueias, com um código, a resolução passo a passo de <strong>todos os exames</strong> — e o acesso fica guardado neste telemóvel.</p>
       ${botaoCompra ? `<div style="margin-top:.8rem">${botaoCompra}</div>` : ""}
     </section>
-    <h2 class="titulo-seccao">Arquivo de exames originais (PDF oficial) — Matemática 10ª</h2>
-    <p class="aviso">Folhas de exame verdadeiras, digitalizadas (INEC/MINEDH), via arquivo público mozexames.com. Toca em "Ver original" para leres o PDF sem sair da app. As resoluções destes anos entram no PreparaMZ uma a uma.</p>
-    ${(window.ORIGINAIS || []).map((o, i) => `<button class="cartao cartao-exame" onclick="abrirOriginalArquivo(${i})"><span><span class="nome">Matemática ${o.ano} — ${esc(o.epoca)}</span><br><span class="meta">10ª Classe · exame original</span></span><span class="selo selo-pronto">Ver original</span></button>`).join("")}
+    <h2 class="titulo-seccao">Arquivo de exames originais (PDF oficial)</h2>
+    <p class="aviso">Folhas de exame verdadeiras, digitalizadas (INEC/MINEDH), via arquivo público mozexames.com — 9ª e 10ª classes, todas as disciplinas, 2000–2025 (${totalArquivo()} exames verificados). São os enunciados oficiais, grátis. Escolhe a classe e a disciplina; toca num exame para leres o PDF sem sair da app.</p>
+    <div id="arquivo"></div>
     <h2 class="titulo-seccao">A caminho (2008–2025)</h2>
     ${breve}
     <p class="aviso">Novas resoluções entram todas as semanas, dos anos recentes para os mais antigos. Quem tem acesso completo recebe tudo sem pagar mais nesta época.</p>`;
+  desenharArquivo();
 }
 
+// ---------- Arquivo de originais: filtros Classe → Disciplina → anos ----------
+// Dados em data/arquivo.js (window.ARQUIVO). Só se desenha a lista da
+// disciplina seleccionada — nunca as centenas de itens de uma vez.
+let arqClasse = "10";
+let arqDisciplina = "Matemática";
+
+function totalArquivo() {
+  const A = window.ARQUIVO || {};
+  let n = 0;
+  for (const c of Object.values(A)) for (const l of Object.values(c)) n += l.length;
+  return n;
+}
+
+function totalClasse(c) {
+  const A = (window.ARQUIVO || {})[c] || {};
+  return Object.values(A).reduce((s, l) => s + l.length, 0);
+}
+
+function desenharArquivo() {
+  const caixa = document.getElementById("arquivo");
+  if (!caixa) return;
+  const A = window.ARQUIVO || {};
+  const disciplinas = Object.keys(A[arqClasse] || {});
+  if (!disciplinas.includes(arqDisciplina)) arqDisciplina = disciplinas[0];
+  const lista = (A[arqClasse] || {})[arqDisciplina] || [];
+  const classes = ["10", "9"].map(c => `
+    <button class="aba ${arqClasse === c ? "activa" : ""}" onclick="arqEscolherClasse('${c}')">${c}ª Classe · ${totalClasse(c)}</button>`).join("");
+  const chips = disciplinas.map(d => `
+    <button class="chip ${arqDisciplina === d ? "activa" : ""}" onclick="arqEscolherDisciplina('${esc(d)}')">${esc(d)} · ${(A[arqClasse][d] || []).length}</button>`).join("");
+  const nota9 = arqClasse === "9"
+    ? `<p class="aviso">O arquivo público só tem, por agora, exames da 9ª classe de 2025 — é o ano em que o exame nacional da 9ª aparece neste arquivo.</p>` : "";
+  const itens = lista.map((x, i) => `
+    <button class="cartao cartao-exame" onclick="abrirArquivoItem('${arqClasse}','${esc(arqDisciplina)}',${i})"><span><span class="nome">${esc(arqDisciplina)} ${x[0]} — ${esc(x[1])}</span><br><span class="meta">${arqClasse}ª Classe · exame original</span></span><span class="selo selo-pronto">Ver original</span></button>`).join("");
+  caixa.innerHTML = `
+    <div class="abas">${classes}</div>
+    <div class="chips">${chips}</div>
+    ${nota9}
+    ${itens}`;
+}
+
+function arqEscolherClasse(c) {
+  arqClasse = c;
+  const disciplinas = Object.keys((window.ARQUIVO || {})[c] || {});
+  // Ao trocar de classe, preferir Matemática quando existir.
+  arqDisciplina = disciplinas.includes("Matemática") ? "Matemática" : disciplinas[0];
+  desenharArquivo();
+}
+
+function arqEscolherDisciplina(d) {
+  arqDisciplina = d;
+  desenharArquivo();
+}
+
+function urlArquivo(uuid) { return "https://storage.mozexames.com/papers/" + uuid + "/question.pdf"; }
+
 // ---------- Arquivo: original aberto dentro da app (interface 7) ----------
-function abrirOriginalArquivo(i) {
-  const o = (window.ORIGINAIS || [])[i];
-  if (!o) return;
+function abrirArquivoItem(classe, disciplina, i) {
+  const lista = ((window.ARQUIVO || {})[classe] || {})[disciplina] || [];
+  const x = lista[i];
+  if (!x) return;
+  arqClasse = classe; arqDisciplina = disciplina; // o ✕/voltar repõe estes filtros
   actualizarEstado();
-  const titulo = `Matemática ${o.ano} — ${o.epoca}`;
+  const titulo = `${disciplina} ${x[0]} — ${x[1]}`;
   app.innerHTML = `
     <button class="voltar" onclick="vistaInicial()">← Arquivo de originais</button>
     <section class="hero">
       <h1>Exame original — ${esc(titulo)}</h1>
-      <p>10ª Classe · folha de exame oficial digitalizada (INEC/MINEDH), via arquivo público mozexames.com.</p>
+      <p>${classe}ª Classe · folha de exame oficial digitalizada (INEC/MINEDH), via arquivo público mozexames.com.</p>
     </section>
-    ${visorPDF(o.url, titulo, "vistaInicial()")}
-    <p class="aviso">O original é o documento oficial, tal como foi digitalizado. As resoluções do PreparaMZ são separadas e escritas pela nossa equipa.</p>`;
+    ${visorPDF(urlArquivo(x[2]), titulo, "vistaInicial()")}
+    <p class="aviso">O original é o documento oficial (enunciado), tal como foi digitalizado. As resoluções passo a passo do PreparaMZ, por agora, são só as de Matemática 10ª publicadas no topo desta página.</p>`;
   window.scrollTo(0, 0);
+}
+
+// Compatibilidade: índice na lista de Matemática 10ª (window.ORIGINAIS).
+function abrirOriginalArquivo(i) {
+  const o = (window.ORIGINAIS || [])[i];
+  if (!o) return;
+  const lista = ((window.ARQUIVO || {})["10"] || {})["Matemática"] || [];
+  const j = lista.findIndex(x => x[0] === o.ano && x[1] === o.epoca);
+  if (j >= 0) abrirArquivoItem("10", "Matemática", j);
 }
 
 // ---------- Vista de um exame (interface 2) ----------

@@ -58,6 +58,9 @@ button.cartao{font:inherit;color:inherit}
 .abas{display:flex;gap:.35rem;margin-bottom:1rem;background:var(--cartao2);border:1px solid var(--linha);border-radius:12px;padding:.35rem}
 .aba{flex:1;padding:.6rem .3rem;border-radius:9px;border:none;background:transparent;color:var(--suave);font:inherit;font-weight:700;cursor:pointer;font-size:.92rem}
 .aba.activa{background:var(--azul);color:#fff}
+.chips{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1rem}
+.chip{padding:.45rem .7rem;border-radius:99px;border:1px solid var(--linha);background:var(--cartao2);color:var(--suave);font:inherit;font-weight:700;cursor:pointer;font-size:.85rem}
+.chip.activa{background:var(--azul);border-color:var(--azul);color:#fff}
 .progresso{margin-bottom:1rem}
 .progresso .prog-cab{display:flex;justify-content:space-between;font-size:.85rem;color:var(--suave);margin-bottom:.35rem}
 .barra{height:8px;background:#1e3a63;border-radius:99px;overflow:hidden}
