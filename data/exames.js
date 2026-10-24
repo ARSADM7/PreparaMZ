@@ -378,9 +378,9 @@ window.EXAMES = [
 
 // Exames em produção (aparecem na lista, ainda sem conteúdo)
 window.EM_BREVE = [
-  { disciplina: "Matemática", classe: "10ª Classe", ano: 2013, chamada: "1ª Época" },
-  { disciplina: "Matemática", classe: "10ª Classe", ano: 2012, chamada: "1ª e 2ª Épocas" },
-  { disciplina: "Matemática", classe: "10ª Classe", ano: 2011, chamada: "2ª Época" }
+  { disciplina: "Matemática", classe: "10ª Classe", ano: 2009, chamada: "2ª Época" },
+  { disciplina: "Matemática", classe: "10ª Classe", ano: 2005, chamada: "1ª Época" },
+  { disciplina: "Matemática", classe: "10ª Classe", ano: 2003, chamada: "1ª e 2ª Épocas" }
 ];
 
 // O arquivo de exames ORIGINAIS (todas as disciplinas, 9ª e 10ª) vive agora
