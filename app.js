@@ -7,6 +7,11 @@ const CONFIG = {
   mensagemCompra: "Olá! Quero comprar o acesso ao PreparaMZ (exames resolvidos da 10ª classe) por 50 MT."
 };
 
+// Versão visível da app (selo no rodapé, para distinguir a versão nova de
+// cópias antigas em cache). TEM de coincidir com o CACHE em sw.js
+// ("preparamz-v9") — os dois sobem sempre juntos.
+const VERSAO_APP = "v9";
+
 // Hashes SHA-256 dos códigos de desbloqueio (os códigos em claro ficam
 // no ficheiro privado do dono — nunca neste ficheiro público).
 const CODIGOS_HASH = ["b055d7a89cf4617a15e0bc6cf4a61bb08ef61967c27d045596e7dbcd3644e49b","280a06f3e1d22bee0e4e1b06b8a3616bbee2428885bb5966c7fc62f89b7c8dda","6acd36637bbfde3ebce2eb5cca8191c23ce15aeb8fe8a2879da4e442973425da","d4c0f6880c316ca568f17a4f99f8208d9a086f4fbb8679e6bbb6a0217d53e83f","241f5b2e3549111fa56a4e92f3c4bb60eb7233ceb589475573285f51b1e73f1c","bef8177e1b021ff56d192728e62fa3b8c5d605a8ac5d2af065a1ec0b0544695e","fadf26f96e035fc150f9c5fde73ee64c3bd840afabc0bc931d52c05b2487269c","946e91ce5cb591cbc751cba8849054b0459bbd37b1979e4a27cfc023578bf309","a7e02bb14e1ce20d94cee227de1b648a35f029eb37c5d540f28b0b383b2e675f","f18b598e4fc0b47c24cab0e10fbd6709d1714ffea4639b86da07f32ac7404140","864f22e76da55e248658e019a683905723116b36a1be90d374edf1ab6627d7d8","1a4c5954972cac1bf0b9aed573d96ece23d6ca69a193ba69dbf9f80df57d4880","2d6af3526ba55d1dbf5906c2e5afdef0b83cf8d84f52095419be9613f7c09343","e52f7c4c25997c83a354e253bf975cc8e8411ce47227effeed9fdff95add7baf","4c189ed507707d8fe5cd9c4504630b0ea452ae60d5c7ee18798ffb12df1e44b3","002ff779a4446b4cd2da5a0cce1d2baa7a6055b10c98c59c6c8fa6faafd56bee","2a9d6b7bd069790b56b53d911b2152ed4de4b0b0266ba72d06e9c331ec911430","3476feb2191fbbfef90cbe3a3031e345900e139ba7c014b253a4b476d71515be","5df8074039df607e0cbd71b0b87d210bf2f8a195cec49492d109065e20b66ec2","5aff4e9143dba20e3f483fdb8588d049468d03a84af2a26f2ba6174a7153eee6"];
@@ -28,6 +33,128 @@ async function sha256(texto) {
 }
 
 function esc(s) { const d = document.createElement("div"); d.textContent = s; return d.innerHTML; }
+
+// ---------- Notação matemática (frações empilhadas, expoentes/índices) ----------
+// Os textos dos exames já trazem expoentes e índices em Unicode verdadeiro
+// (x², 2ˣ, log₂, xᵥ, √, ∈, ∞) — ficam como estão; o formatador apenas agrupa
+// cada sequência de expoente/índice num <span> (.expo/.ind) para a
+// apresentação ser uniforme e a linha não esticar. As frações escritas com
+// "/" passam a desenhar-se empilhadas (numerador sobre denominador, com
+// linha), só com CSS próprio (.frac) — sem bibliotecas e sem rede.
+// Conservador: só converte quando os dois lados são inequivocamente
+// matemáticos — número, √…, π, letra isolada ou grupo entre parênteses.
+// Texto corrido com "/" (ex.: "cateto oposto / hipotenusa", "INEC/MINEDH")
+// NÃO converte: palavras de 2+ letras de qualquer dos lados ficam de fora,
+// assim como anos, ordinais ("1ª chamada") e intervalos sem fração.
+// A barra e os espaços originais ficam guardados num elemento invisível
+// (.fsep) dentro da fração: o texto, sem a marcação nova, fica EXACTAMENTE
+// igual ao original (verificado em teste-redesign/teste-notacao.js).
+
+const SUP_CHARS = "⁰¹²³⁴⁵⁶⁷⁸⁹⁻⁺ˣʸ";
+const SUB_CHARS = "₀₁₂₃₄₅₆₇₈₉ₓᵥₐₑₒₔₕₖₗₘₙₚₛₜ";
+
+function _ehDigito(c) { return !!c && c >= "0" && c <= "9"; }
+function _ehLetra(c) { return !!c && ((c >= "A" && c <= "Z") || (c >= "a" && c <= "z") || "ÁÀÂÃÉÊÍÓÔÕÚÇáàâãéêíóôõúç".includes(c)); }
+
+function _grupoParenteses(s, i) {
+  if (s[i] !== "(") return null;
+  let prof = 0;
+  for (let j = i; j < s.length; j++) {
+    if (s[j] === "(") prof++;
+    else if (s[j] === ")") { prof--; if (prof === 0) return { fim: j + 1, texto: s.slice(i, j + 1) }; }
+  }
+  return null;
+}
+
+// Termo matemático simples: 12 · 0,44 · 10√3 · √3 · π · 270° · x · x² · 3m
+function _termo(s, i) {
+  let j = i, unidades = 0;
+  while (j < s.length) {
+    const c = s[j];
+    if (_ehDigito(c)) {
+      while (j < s.length && _ehDigito(s[j])) j++;
+      if ((s[j] === "," || s[j] === ".") && _ehDigito(s[j + 1])) {
+        j++;
+        while (j < s.length && _ehDigito(s[j])) j++;
+      }
+      unidades++;
+    } else if (c === "√") {
+      let k = j + 1;
+      if (k < s.length && _ehDigito(s[k])) { while (k < s.length && _ehDigito(s[k])) k++; j = k; }
+      else if (k < s.length && _ehLetra(s[k])) { j = k + 1; }
+      else break;
+      unidades++;
+    } else if (c === "π" || c === "°") {
+      j++; unidades++;
+    } else if (_ehLetra(c)) {
+      j++;
+      while (j < s.length && (SUP_CHARS.includes(s[j]) || SUB_CHARS.includes(s[j]))) j++;
+      unidades++;
+    } else break;
+  }
+  if (!unidades) return null;
+  const texto = s.slice(i, j);
+  return { fim: j, texto, palavra: /^[A-Za-zÀ-ÿ]+$/.test(texto) && texto.length > 1 };
+}
+
+// Operando de uma fração: [sinal] (grupo entre parênteses | termo)
+function _operando(s, i) {
+  let j = i, sinal = "";
+  if (s[j] === "−" || s[j] === "-" || s[j] === "±") { sinal = s[j]; j++; }
+  const g = _grupoParenteses(s, j);
+  if (g) return { fim: g.fim, texto: sinal + g.texto, palavra: false };
+  const t = _termo(s, j);
+  if (t) return { fim: t.fim, texto: sinal + t.texto, palavra: t.palavra };
+  return null;
+}
+
+function _operandoValido(op) { return !!op && !op.palavra; }
+
+function fmtMat(s) {
+  if (!s) return s;
+  let out = "", i = 0;
+  while (i < s.length) {
+    const c = s[i];
+    const antes = i > 0 ? s[i - 1] : "";
+    const podeComecar = i === 0 || !(_ehDigito(antes) || _ehLetra(antes) || antes === "/");
+    if (podeComecar && (_ehDigito(c) || _ehLetra(c) || c === "√" || c === "π" || c === "(" || c === "−" || c === "±")) {
+      const num = _operando(s, i);
+      if (_operandoValido(num)) {
+        let j = num.fim;
+        while (s[j] === " ") j++;
+        if (s[j] === "/") {
+          let k = j + 1;
+          while (s[k] === " ") k++;
+          const den = _operando(s, k);
+          if (_operandoValido(den)) {
+            out += `<span class="frac"><span class="fnum">${fmtMat(num.texto)}</span><span class="fsep">${s.slice(num.fim, k)}</span><span class="fden">${fmtMat(den.texto)}</span></span>`;
+            i = den.fim;
+            continue;
+          }
+        }
+      }
+    }
+    if (SUP_CHARS.includes(c)) {
+      let j = i;
+      while (j < s.length && SUP_CHARS.includes(s[j])) j++;
+      out += `<span class="expo">${s.slice(i, j)}</span>`;
+      i = j;
+      continue;
+    }
+    if (SUB_CHARS.includes(c)) {
+      let j = i;
+      while (j < s.length && SUB_CHARS.includes(s[j])) j++;
+      out += `<span class="ind">${s.slice(i, j)}</span>`;
+      i = j;
+      continue;
+    }
+    out += c;
+    i++;
+  }
+  return out;
+}
+
+function fmt(s) { return fmtMat(esc(s)); }
 
 
 // ---------- Figuras (imagens) das perguntas ----------
@@ -200,7 +327,7 @@ function perguntaFocadaHTML(e) {
   const p = e.perguntas[perguntaActual];
   return `<article class="pergunta">
         <div class="cab"><span class="num">Pergunta ${p.numero}</span>${p.cotacao ? `<span class="cot">Cotação: ${esc(p.cotacao)} valores</span>` : ""}</div>
-        <div class="enunciado">${esc(p.enunciado)}</div>${figuraHTML(e, p, "enunciado")}
+        <div class="enunciado">${fmt(p.enunciado)}</div>${figuraHTML(e, p, "enunciado")}
       </article>`;
 }
 
@@ -212,15 +339,15 @@ function resolucaoFocadaHTML(e, livre) {
   if (visivel) {
     corpoResolucao = `
         ${figuraHTML(e, p, "resolucao")}
-        <ol class="passos">${p.passos.map(s => `<li>${esc(s)}</li>`).join("")}</ol>
-        <div class="resposta">Resposta: ${esc(p.resposta)}</div>`;
+        <ol class="passos">${p.passos.map(s => `<li>${fmt(s)}</li>`).join("")}</ol>
+        <div class="resposta">Resposta: ${fmt(p.resposta)}</div>`;
   } else {
     // Desbloqueio no sítio certo: painel dentro da própria pergunta bloqueada.
     corpoResolucao = caixaCodigo();
   }
   return `<article class="pergunta">
         <div class="cab"><span class="num">Pergunta ${p.numero} — resolução</span>${amostra && !livre ? '<span class="amostra">AMOSTRA GRÁTIS</span>' : ""}</div>
-        <div class="enunciado">${esc(p.enunciado)}</div>${figuraHTML(e, p, "enunciado")}
+        <div class="enunciado">${fmt(p.enunciado)}</div>${figuraHTML(e, p, "enunciado")}
         ${corpoResolucao}
       </article>`;
 }
@@ -330,10 +457,10 @@ function documentoHTML(tipo) {
   const meta = `${e.classe} · Exame Final${e.duracao ? " · " + e.duracao : ""} · ${e.totalPerguntas} perguntas`;
   const partes = e.perguntas.map(p => {
     const cab = `<h3>Pergunta ${p.numero}${p.cotacao ? ` <span class="pcot">(Cotação: ${esc(p.cotacao)} valores)</span>` : ""}</h3>`;
-    const enun = `<p class="penun">${esc(p.enunciado)}</p>` + figuraHTML(e, p, "enunciado");
+    const enun = `<p class="penun">${fmt(p.enunciado)}</p>` + figuraHTML(e, p, "enunciado");
     if (tipo === "enunciado") return `<div class="pq">${cab}${enun}</div>`;
-    const passos = p.passos.map(x => `<li>${esc(x)}</li>`).join("");
-    return `<div class="pq">${cab}${enun}${figuraHTML(e, p, "resolucao")}<ol>${passos}</ol><p class="presp"><strong>Resposta:</strong> ${esc(p.resposta)}</p></div>`;
+    const passos = p.passos.map(x => `<li>${fmt(x)}</li>`).join("");
+    return `<div class="pq">${cab}${enun}${figuraHTML(e, p, "resolucao")}<ol>${passos}</ol><p class="presp"><strong>Resposta:</strong> ${fmt(p.resposta)}</p></div>`;
   }).join("");
   return `<div class="pdoc">
       <div class="pmarca">📚 PreparaMZ — Exames Resolvidos de Moçambique</div>
@@ -373,5 +500,9 @@ function imprimirPDF(tipo) {
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("sw.js").catch(() => {});
 }
+
+// Selo de versão no rodapé (visível também na página inicial)
+const elVersao = document.getElementById("versao-app");
+if (elVersao) elVersao.textContent = "PreparaMZ · " + VERSAO_APP;
 
 vistaInicial();

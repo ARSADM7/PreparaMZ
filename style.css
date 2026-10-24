@@ -159,12 +159,29 @@ button.cartao{font:inherit;color:inherit}
   }
 }
 
+/* --- Notação matemática: frações empilhadas e expoentes/índices ---
+   Gerada por fmtMat() em app.js. A fração é uma coluna (numerador / linha /
+   denominador) alinhada ao meio da linha de texto. A barra original fica
+   num .fsep invisível (acessibilidade e cópia fiel do texto). */
+.frac{position:relative;display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 .14em;font-size:.84em;line-height:1.18;text-align:center}
+.frac .fnum{border-bottom:1.6px solid currentColor;padding:0 .22em .05em}
+.frac .fden{padding:.05em .22em 0}
+.fsep{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap}
+.expo,.ind{line-height:0}
+
+/* --- Selo de versão (rodapé) --- */
+.rodape .versao{margin-top:.35rem;font-size:.78rem;opacity:.75;letter-spacing:.02em}
+
 /* ===== Área de impressão / PDF ===== */
 #print-area{display:none}
 @media print{
+  /* Página sempre branca no papel/PDF: sem isto, quem imprime com
+     "gráficos de fundo" activos recebe o fundo navy da app e o texto
+     do documento fica ilegível (corrigido na v9). */
+  html,body{background:#fff !important}
   body > header, body > main, body > footer{display:none !important}
-  #print-area{display:block !important}
-  .pdoc{font-family:Georgia,"Times New Roman",serif;color:#111;font-size:12.5pt;line-height:1.45}
+  #print-area{display:block !important;background:#fff}
+  .pdoc{font-family:Georgia,"Times New Roman",serif;color:#111;background:#fff;font-size:12.5pt;line-height:1.45}
   .pdoc .pmarca{font-family:Arial,sans-serif;font-weight:bold;color:#123f7b;font-size:11pt;border-bottom:2.5px solid #123f7b;padding-bottom:6px;margin-bottom:14px}
   .pdoc h1{font-size:19pt;margin:0 0 2px}
   .pdoc .psub{font-size:13.5pt;margin:0 0 2px;color:#123f7b;font-weight:bold}
