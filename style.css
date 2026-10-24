@@ -45,3 +45,7 @@ h2.titulo-seccao{font-size:1.05rem;margin:1.2rem 0 .6rem}
 .rodape{max-width:760px;margin:0 auto;padding:1rem;color:var(--suave);font-size:.85rem}
 .aviso{font-size:.85rem;color:var(--suave);margin-top:.5rem}
 @media print{.topo,.abas,.caixa-codigo,.botao,.voltar{display:none}}
+
+/* Figuras (imagens) das perguntas */
+.figura { margin-top: .6rem; background: #fff; border: 1px solid #dbe7dd; border-radius: 10px; padding: .55rem; text-align: center; }
+.figura svg { max-width: 100%; height: auto; }

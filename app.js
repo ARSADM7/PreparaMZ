@@ -29,6 +29,17 @@ async function sha256(texto) {
 
 function esc(s) { const d = document.createElement("div"); d.textContent = s; return d.innerHTML; }
 
+
+// ---------- Figuras (imagens) das perguntas ----------
+function figuraHTML(e, p, tipo) {
+  const mapa = (window.FIGURAS || {})[e.id];
+  if (!mapa) return "";
+  const f = mapa[p.numero];
+  if (!f) return "";
+  const svg = tipo === "resolucao" ? f.resolucao : f.enunciado;
+  return svg ? `<div class="figura">${svg}</div>` : "";
+}
+
 // ---------- Vista inicial ----------
 function vistaInicial() {
   actualizarEstado();
@@ -82,7 +93,7 @@ function desenharExame() {
     corpo = e.perguntas.map(p => `
       <article class="pergunta">
         <div class="cab"><span class="num">Pergunta ${p.numero}</span>${p.cotacao ? `<span class="cot">Cotação: ${esc(p.cotacao)} valores</span>` : ""}</div>
-        <div class="enunciado">${esc(p.enunciado)}</div>
+        <div class="enunciado">${esc(p.enunciado)}</div>${figuraHTML(e, p, "enunciado")}
       </article>`).join("") +
       `<p class="aviso">Fonte: ${esc(e.fonteEnunciado)}. Duração: ${esc(e.duracao)}.</p>`;
   } else {
@@ -91,13 +102,14 @@ function desenharExame() {
       const amostra = i === 0; // primeira pergunta resolvida é grátis
       const visivel = livre || amostra;
       const resolucao = visivel ? `
+        ${figuraHTML(e, p, "resolucao")}
         <ol class="passos">${p.passos.map(s => `<li>${esc(s)}</li>`).join("")}</ol>
         <div class="resposta">Resposta: ${esc(p.resposta)}</div>` : `
         <div class="blur"><ol class="passos"><li>Resolução passo a passo desta pergunta…</li><li>Explicação completa com todos os cálculos…</li></ol>
         <div class="resposta">Resposta: …</div></div>`;
       return `<article class="pergunta">
         <div class="cab"><span class="num">Pergunta ${p.numero} — resolução</span>${amostra && !livre ? '<span class="amostra">AMOSTRA GRÁTIS</span>' : ""}</div>
-        <div class="enunciado">${esc(p.enunciado)}</div>
+        <div class="enunciado">${esc(p.enunciado)}</div>${figuraHTML(e, p, "enunciado")}
         ${resolucao}
       </article>`;
     }).join("");
