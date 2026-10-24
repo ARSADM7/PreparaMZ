@@ -10,9 +10,10 @@ window.EXAMES = [
     duracao: "120 Minutos",
     totalPerguntas: 10,
     fonteEnunciado: "Exame Final oficial ES1/2025, Instituto Nacional de Exames, Certificação e Equivalências (Moçambique)",
+    originalPdf: "https://storage.mozexames.com/papers/6f2354c9-dee6-4224-bf85-548d21204461/question.pdf",
     perguntas: [
       {
-        numero: 1, cotacao: "",
+        numero: 1, cotacao: "2,5",
         enunciado: "Numa pesquisa com 300 pessoas sobre hábitos alimentares, foram obtidos os seguintes dados: 210 pessoas consomem fruta diariamente; 180 consomem legumes diariamente; 150 consomem cereais diariamente; 135 consomem fruta e legumes; 120 consomem fruta e cereais; 105 consomem legumes e cereais; 90 consomem os três tipos de alimentos.\na) Represente essa situação num diagrama de Venn.\nb) Quantas pessoas não consomem nenhum dos três tipos de alimentos diariamente?",
         passos: [
           "Começa pelo centro do diagrama: coloca 90 no cruzamento dos três círculos (quem consome os três alimentos).",
@@ -24,7 +25,7 @@ window.EXAMES = [
         resposta: "Diagrama — centro: 90; só fruta+legumes: 45; só fruta+cereais: 30; só legumes+cereais: 15; só fruta: 45; só legumes: 30; só cereais: 15.  b) 30 pessoas não consomem nenhum dos três alimentos."
       },
       {
-        numero: 2, cotacao: "",
+        numero: 2, cotacao: "2,5",
         enunciado: "Dados os quadrados A e B, com áreas representadas por A(x) = 4x⁴ − 35x² e B(x) = x², respectivamente, onde x representa a medida do lado, determine o valor de x de modo que as áreas sejam iguais.",
         passos: [
           "Áreas iguais significa A(x) = B(x): 4x⁴ − 35x² = x².",
@@ -36,7 +37,7 @@ window.EXAMES = [
         resposta: "x = 3"
       },
       {
-        numero: 3, cotacao: "",
+        numero: 3, cotacao: "2,0",
         enunciado: "Dado o gráfico da função (curva decrescente que passa pela origem e pelo ponto (−2, 3) e se aproxima da recta y = −1 sem a tocar), indique:\na) o contradomínio;\nb) a ordenada na origem;\nc) o zero da função, se existir;\nd) a monotonia.",
         passos: [
           "Observa o gráfico: a curva desce da esquerda para a direita, passa por (0, 0) e por (−2, 3), e aproxima-se da recta y = −1 sem nunca a tocar (assíntota horizontal).",
@@ -48,7 +49,7 @@ window.EXAMES = [
         resposta: "a) CD(f) = ]−1, +∞[  ·  b) ordenada na origem: 0  ·  c) zero: x = 0  ·  d) decrescente em todo o domínio"
       },
       {
-        numero: 4, cotacao: "",
+        numero: 4, cotacao: "1,5",
         enunciado: "Dada a inequação −x² + 6x − 10 < 0:\na) esboce o gráfico da função quadrática associada f(x);\nb) determine o conjunto solução da inequação.",
         passos: [
           "Função associada: f(x) = −x² + 6x − 10, com a = −1, b = 6 e c = −10.",
@@ -61,7 +62,7 @@ window.EXAMES = [
         resposta: "a) Parábola de concavidade para baixo, vértice (3, −1), sem zeros reais, corta y em −10.  b) S = ℝ"
       },
       {
-        numero: 5, cotacao: "",
+        numero: 5, cotacao: "2,0",
         enunciado: "Um triângulo rectângulo tem um cateto de 5 cm de comprimento e um ângulo de 60°, oposto a esse cateto. Qual é o comprimento da hipotenusa?",
         passos: [
           "Conhecemos o cateto oposto ao ângulo de 60° (5 cm) e queremos a hipotenusa: usa-se o seno.",
@@ -72,18 +73,18 @@ window.EXAMES = [
         resposta: "A hipotenusa mede 10√3/3 cm ≈ 5,77 cm"
       },
       {
-        numero: 6, cotacao: "",
-        enunciado: "As idades de 18 alunos da 10ª classe são: 15, 16, 15, 17, 16, 15, 16, 17, 15, 16, 15, 17, 16, 15, 16, 17, 15, 16.\na) Construa uma tabela de frequências (absoluta e relativa) para as idades.\nb) Qual é a idade mediana dos alunos?",
+        numero: 6, cotacao: "3,5",
+        enunciado: "As idades de 16 alunos da 10ª classe são: 15, 16, 15, 17, 16, 15, 16, 15, 17, 15, 16, 15, 17, 16, 15, 16.\na) Construa uma tabela de frequências (absoluta e relativa) para as idades.\nb) Qual é a idade mediana dos alunos?",
         passos: [
-          "Conta quantos alunos têm cada idade: 15 anos → 7 alunos; 16 anos → 7 alunos; 17 anos → 4 alunos (total: 18).",
-          "Frequência relativa = frequência absoluta ÷ 18: 7/18 ≈ 0,39 (15 e 16 anos); 4/18 ≈ 0,22 (17 anos). A soma das relativas dá 1.",
-          "Para a mediana, ordena as idades: sete 15, sete 16, quatro 17. Com 18 dados (número par), a mediana é a média dos valores das posições 9 e 10.",
-          "A posição 9 vale 16 e a posição 10 vale 16, logo a mediana é (16 + 16) / 2 = 16."
+          "Conta quantos alunos têm cada idade: 15 anos → 7 alunos; 16 anos → 6 alunos; 17 anos → 3 alunos (total: 16).",
+          "Frequência relativa = frequência absoluta ÷ 16: 7/16 ≈ 0,44 (15 anos); 6/16 = 0,375 ≈ 0,38 (16 anos); 3/16 ≈ 0,19 (17 anos). A soma das relativas dá 1.",
+          "Para a mediana, ordena as idades: sete 15, seis 16, três 17. Com 16 dados (número par), a mediana é a média dos valores das posições 8 e 9.",
+          "A posição 8 vale 16 e a posição 9 vale 16, logo a mediana é (16 + 16) / 2 = 16."
         ],
-        resposta: "a) 15 anos: f = 7, fr ≈ 0,39 · 16 anos: f = 7, fr ≈ 0,39 · 17 anos: f = 4, fr ≈ 0,22  ·  b) Idade mediana: 16 anos"
+        resposta: "a) 15 anos: f = 7, fr ≈ 0,44 · 16 anos: f = 6, fr ≈ 0,38 · 17 anos: f = 3, fr ≈ 0,19  ·  b) Idade mediana: 16 anos"
       },
       {
-        numero: 7, cotacao: "",
+        numero: 7, cotacao: "2,0",
         enunciado: "Calcule o valor de p na equação x² − px + 24 = 0, de modo que a soma das raízes seja 2/3.",
         passos: [
           "Na equação ax² + bx + c = 0, a soma das raízes é dada por −b/a (relações de Girard).",
@@ -93,7 +94,7 @@ window.EXAMES = [
         resposta: "p = 2/3"
       },
       {
-        numero: 8, cotacao: "",
+        numero: 8, cotacao: "1,0",
         enunciado: "Quais das seguintes funções são quadráticas?\nA. f(x) = 9 − 4x\nB. g(x) = 4x² + 2x − 7\nC. h(x) = √x + x²\nD. f(x) = −5x²",
         passos: [
           "Uma função é quadrática quando pode ser escrita na forma ax² + bx + c, com a ≠ 0 (polinómio de grau 2).",
@@ -105,7 +106,7 @@ window.EXAMES = [
         resposta: "São quadráticas as funções B e D"
       },
       {
-        numero: 9, cotacao: "",
+        numero: 9, cotacao: "2,0",
         enunciado: "Encontre a expressão analítica da função quadrática cujo gráfico tem zeros em −3 e 1 e passa pelo ponto (2, −5).",
         passos: [
           "Com os zeros conhecidos, usa a forma factorizada: f(x) = a(x − x₁)(x − x₂) = a(x + 3)(x − 1).",
@@ -117,7 +118,7 @@ window.EXAMES = [
         resposta: "f(x) = −x² − 2x + 3"
       },
       {
-        numero: 10, cotacao: "",
+        numero: 10, cotacao: "1,0",
         enunciado: "Simplifique log₆36 + log₆1.",
         passos: [
           "Calcula cada logaritmo pela definição: log₆36 = 2, porque 6² = 36.",
@@ -136,6 +137,7 @@ window.EXAMES = [
     chamada: "1ª Chamada",
     duracao: "120 Minutos",
     totalPerguntas: 10,
+    originalPdf: "https://storage.mozexames.com/papers/263e423b-37da-4c4c-b12f-5945934e4fde/question.pdf",
     fonteEnunciado: "Exame Final oficial ES1/2024, Instituto Nacional de Exames, Certificação e Equivalências (Moçambique)",
     perguntas: [
       {
@@ -261,4 +263,43 @@ window.EM_BREVE = [
   { disciplina: "Matemática", classe: "10ª Classe", ano: 2013, chamada: "1ª Época" },
   { disciplina: "Matemática", classe: "10ª Classe", ano: 2012, chamada: "1ª e 2ª Épocas" },
   { disciplina: "Matemática", classe: "10ª Classe", ano: 2011, chamada: "2ª Época" }
+];
+
+// Arquivo de exames ORIGINAIS (PDF oficial digitalizado) — Matemática 10ª Classe
+// Fonte: arquivo público mozexames.com (exames oficiais INEC/MINEDH).
+window.ORIGINAIS = [
+  { ano: 2000, epoca: "1ª Época", url: "https://storage.mozexames.com/papers/bcaca8b6-4121-49c8-9e67-bcf598d57643/question.pdf" },
+  { ano: 2000, epoca: "2ª Época", url: "https://storage.mozexames.com/papers/4664e657-c1a0-4814-aabe-b6e9511fce63/question.pdf" },
+  { ano: 2001, epoca: "1ª Época", url: "https://storage.mozexames.com/papers/d7e8d9d9-2c82-4730-af5e-9233b9024d3c/question.pdf" },
+  { ano: 2001, epoca: "2ª Época", url: "https://storage.mozexames.com/papers/df0364f0-4da5-46be-99e5-da833083d86d/question.pdf" },
+  { ano: 2002, epoca: "1ª Época", url: "https://storage.mozexames.com/papers/d9400a10-10b2-4f51-a8a1-fbd660c2230c/question.pdf" },
+  { ano: 2002, epoca: "2ª Época", url: "https://storage.mozexames.com/papers/c2ca955d-09d2-47a3-8b4f-df8668d54d37/question.pdf" },
+  { ano: 2003, epoca: "1ª Época", url: "https://storage.mozexames.com/papers/e2828b1f-0ae3-4dec-8f43-63920759f73d/question.pdf" },
+  { ano: 2003, epoca: "2ª Época", url: "https://storage.mozexames.com/papers/9ae14a92-2d6a-42c9-a36a-2c92ba3ddcd3/question.pdf" },
+  { ano: 2005, epoca: "1ª Época", url: "https://storage.mozexames.com/papers/a947eb5b-9d78-42e9-91ad-6f6ea04d4e08/question.pdf" },
+  { ano: 2009, epoca: "2ª Época", url: "https://storage.mozexames.com/papers/efb073e8-84fa-4cdc-9101-a135e99552f0/question.pdf" },
+  { ano: 2011, epoca: "1ª Época", url: "https://storage.mozexames.com/papers/8226db88-2123-400c-822b-785743646abb/question.pdf" },
+  { ano: 2011, epoca: "2ª Época", url: "https://storage.mozexames.com/papers/f3e00800-fdbc-42e0-8fd1-1c1cac4506ba/question.pdf" },
+  { ano: 2012, epoca: "1ª Época", url: "https://storage.mozexames.com/papers/18dec382-ee84-45e1-bbd1-b31fb8490318/question.pdf" },
+  { ano: 2012, epoca: "2ª Época", url: "https://storage.mozexames.com/papers/5f8588ad-dcca-4e12-b4e6-bf0f1fda0e99/question.pdf" },
+  { ano: 2013, epoca: "1ª Época", url: "https://storage.mozexames.com/papers/fdeda38a-d598-4937-9094-a5d7ebdd8246/question.pdf" },
+  { ano: 2013, epoca: "2ª Época", url: "https://storage.mozexames.com/papers/e356e6f4-ae02-49be-8715-d5611e28524d/question.pdf" },
+  { ano: 2014, epoca: "1ª Época", url: "https://storage.mozexames.com/papers/7e3c3b37-0007-4cea-8175-a665306c999b/question.pdf" },
+  { ano: 2014, epoca: "2ª Época", url: "https://storage.mozexames.com/papers/8d9ce622-4fe4-4f2e-b90e-54fec6b43f97/question.pdf" },
+  { ano: 2015, epoca: "1ª Época", url: "https://storage.mozexames.com/papers/49fe61af-16a0-4719-8f5f-286ab5d13a4a/question.pdf" },
+  { ano: 2015, epoca: "2ª Época", url: "https://storage.mozexames.com/papers/08a25655-73d8-4d68-9e1b-52183d7c99d0/question.pdf" },
+  { ano: 2016, epoca: "1ª Época", url: "https://storage.mozexames.com/papers/83984851-5dfe-4bc6-9093-5ce7569d079f/question.pdf" },
+  { ano: 2016, epoca: "2ª Época", url: "https://storage.mozexames.com/papers/353d1db8-6559-4dc1-bef6-a8074dec1b06/question.pdf" },
+  { ano: 2017, epoca: "1ª Época", url: "https://storage.mozexames.com/papers/d3b23fcb-5823-4ba6-88c0-b6025d93020f/question.pdf" },
+  { ano: 2017, epoca: "2ª Época", url: "https://storage.mozexames.com/papers/2f653c24-e866-4071-bfd2-2a9b4317aba6/question.pdf" },
+  { ano: 2018, epoca: "2ª Época", url: "https://storage.mozexames.com/papers/11bbeeee-a8aa-4b3f-a372-45207d6fd434/question.pdf" },
+  { ano: 2019, epoca: "1ª Época", url: "https://storage.mozexames.com/papers/38b4d656-7da9-45c0-b6bd-dae242ecde0a/question.pdf" },
+  { ano: 2019, epoca: "2ª Época", url: "https://storage.mozexames.com/papers/56543864-f269-47e7-8ca2-8e19abe6f34f/question.pdf" },
+  { ano: 2020, epoca: "1ª Época", url: "https://storage.mozexames.com/papers/ff0c18d1-1f51-4fd9-a98a-43217e37e04d/question.pdf" },
+  { ano: 2021, epoca: "1ª Época", url: "https://storage.mozexames.com/papers/ff055494-2717-48c4-bc31-b76828de42e3/question.pdf" },
+  { ano: 2022, epoca: "1ª Época", url: "https://storage.mozexames.com/papers/ec74a8ce-f451-40da-bb46-d75ac821a564/question.pdf" },
+  { ano: 2022, epoca: "2ª Época", url: "https://storage.mozexames.com/papers/647f5e38-f378-4e15-9baa-505ff4ba78c7/question.pdf" },
+  { ano: 2023, epoca: "1ª Época", url: "https://storage.mozexames.com/papers/213396d2-0a5f-4a2b-b991-9d9e35f31cea/question.pdf" },
+  { ano: 2024, epoca: "1ª Época", url: "https://storage.mozexames.com/papers/263e423b-37da-4c4c-b12f-5945934e4fde/question.pdf" },
+  { ano: 2025, epoca: "1ª Época", url: "https://storage.mozexames.com/papers/6f2354c9-dee6-4224-bf85-548d21204461/question.pdf" }
 ];

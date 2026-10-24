@@ -67,6 +67,9 @@ function vistaInicial() {
     </section>
     <h2 class="titulo-seccao">Matemática — 10ª Classe · pronto agora</h2>
     ${prontos}
+    <h2 class="titulo-seccao">Arquivo de exames originais (PDF oficial) — Matemática 10ª</h2>
+    <p class="aviso">Folhas de exame verdadeiras, digitalizadas (INEC/MINEDH), via arquivo público mozexames.com. As resoluções destes anos entram no PreparaMZ uma a uma.</p>
+    ${(window.ORIGINAIS || []).map(o => `<a class="cartao cartao-exame" href="${o.url}" target="_blank" rel="noopener"><span><span class="nome">Matemática ${o.ano} — ${esc(o.epoca)}</span><br><span class="meta">10ª Classe · exame original</span></span><span class="selo selo-pronto">PDF oficial</span></a>`).join("")}
     <h2 class="titulo-seccao">A caminho (2008–2025)</h2>
     ${breve}
     <p class="aviso">Novas resoluções entram todas as semanas, dos anos recentes para os mais antigos. Quem tem acesso completo recebe tudo sem pagar mais nesta época.</p>`;
@@ -90,7 +93,7 @@ function desenharExame() {
   const e = exameActual;
   let corpo = "";
   if (abaActual === "enunciado") {
-    corpo = `<button class="botao" onclick="imprimirPDF('enunciado')">📄 Guardar enunciado em PDF (grátis)</button>` + e.perguntas.map(p => `
+    corpo = `<button class="botao" onclick="imprimirPDF('enunciado')">📄 Guardar enunciado em PDF (grátis)</button>` + (e.originalPdf ? `<a class="botao" href="${e.originalPdf}" target="_blank" rel="noopener">📄 Exame original (PDF oficial)</a>` : "") + e.perguntas.map(p => `
       <article class="pergunta">
         <div class="cab"><span class="num">Pergunta ${p.numero}</span>${p.cotacao ? `<span class="cot">Cotação: ${esc(p.cotacao)} valores</span>` : ""}</div>
         <div class="enunciado">${esc(p.enunciado)}</div>${figuraHTML(e, p, "enunciado")}
