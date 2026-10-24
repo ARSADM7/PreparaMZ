@@ -1,71 +1,133 @@
-:root{--verde:#0b7a3e;--verde-esc:#075c2d;--amarelo:#ffc61a;--fundo:#f4f7f4;--cartao:#fff;--texto:#16211a;--suave:#5c6b60;--linha:#dde6de;--erro:#b3261e}
+/* ===== PreparaMZ — tema azul-escuro (referências de interface, fase 1) ===== */
+:root{
+  --fundo:#081c3a; --fundo2:#0a2247;
+  --cartao:#10294f; --cartao2:#0d2142; --linha:#1e3a63;
+  --texto:#eaf1fb; --suave:#9db4d4;
+  --azul:#2e7de0; --azul-esc:#1d5fb8; --azul-claro:#7db1f2;
+  --amarelo:#ffc61a; --verde:#22c55e; --whats:#25d366;
+  --erro:#ff9d94; --branco:#fff;
+}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--fundo);color:var(--texto);line-height:1.55}
-.topo{position:sticky;top:0;z-index:10;background:var(--verde);color:#fff;display:flex;justify-content:space-between;align-items:center;padding:.7rem 1rem}
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:linear-gradient(180deg,#071831 0%,var(--fundo2) 45%,var(--fundo) 100%);background-attachment:fixed;color:var(--texto);line-height:1.55;min-height:100vh}
+.topo{position:sticky;top:0;z-index:10;background:rgba(8,24,50,.96);color:#fff;display:flex;justify-content:space-between;align-items:center;padding:.7rem 1rem;border-bottom:1px solid var(--linha)}
 .logo{font-size:1.25rem;font-weight:800}.logo span{color:var(--amarelo)}
-.estado-acesso{font-size:.8rem;background:rgba(255,255,255,.15);padding:.25rem .6rem;border-radius:99px}
+.estado-acesso{font-size:.8rem;background:#1b3a68;padding:.25rem .6rem;border-radius:99px;color:var(--suave)}
 .estado-acesso.liberto{background:var(--amarelo);color:#221c00;font-weight:700}
 main{max-width:760px;margin:0 auto;padding:1rem}
-.hero{background:var(--cartao);border:1px solid var(--linha);border-radius:14px;padding:1.1rem;margin-bottom:1rem}
-.hero h1{font-size:1.35rem;line-height:1.3;margin-bottom:.4rem}
+.hero{background:var(--cartao);border:1px solid var(--linha);border-radius:16px;padding:1.1rem;margin-bottom:1rem}
+.hero h1{font-size:1.35rem;line-height:1.3;margin-bottom:.4rem;color:#fff}
 .hero p{color:var(--suave)}
-.preco{display:inline-block;margin-top:.6rem;background:#e8f5ec;color:var(--verde-esc);font-weight:700;padding:.3rem .7rem;border-radius:8px}
-h2.titulo-seccao{font-size:1.05rem;margin:1.2rem 0 .6rem}
-.cartao{background:var(--cartao);border:1px solid var(--linha);border-radius:14px;padding:1rem;margin-bottom:.7rem}
-.cartao-exame{display:flex;justify-content:space-between;align-items:center;gap:.8rem;cursor:pointer;width:100%;text-align:left;font:inherit}
+.preco{display:inline-block;margin-top:.6rem;background:rgba(46,125,224,.18);color:var(--azul-claro);font-weight:700;padding:.3rem .7rem;border-radius:8px}
+h2.titulo-seccao{font-size:1.05rem;margin:1.2rem 0 .6rem;color:#fff}
+.cartao{background:var(--cartao);border:1px solid var(--linha);border-radius:16px;padding:1rem;margin-bottom:.7rem}
+button.cartao{font:inherit;color:inherit}
+.cartao-exame{display:flex;justify-content:space-between;align-items:center;gap:.8rem;cursor:pointer;width:100%;text-align:left}
 .cartao-exame:active{transform:scale(.99)}
-.cartao-exame .nome{font-weight:700}
+.cartao-exame .nome{font-weight:700;color:#fff}
 .cartao-exame .meta{color:var(--suave);font-size:.88rem}
 .selo{font-size:.72rem;font-weight:700;padding:.25rem .55rem;border-radius:99px;white-space:nowrap}
-.selo-pronto{background:#e8f5ec;color:var(--verde-esc)}
-.selo-breve{background:#f0f0e8;color:#6b6b57}
-.botao{display:inline-block;background:var(--verde);color:#fff;border:none;font:inherit;font-weight:700;padding:.7rem 1.1rem;border-radius:10px;cursor:pointer;text-decoration:none;text-align:center}
-.botao:active{background:var(--verde-esc)}
-.botao.secundario{background:#fff;color:var(--verde-esc);border:2px solid var(--verde)}
-.botao.whats{background:#25d366;color:#06300f}
-.abas{display:flex;gap:.5rem;margin-bottom:1rem}
-.aba{flex:1;padding:.65rem;border-radius:10px;border:2px solid var(--linha);background:#fff;font:inherit;font-weight:700;cursor:pointer}
-.aba.activa{border-color:var(--verde);background:#e8f5ec;color:var(--verde-esc)}
-.pergunta{background:var(--cartao);border:1px solid var(--linha);border-radius:14px;padding:1rem;margin-bottom:.8rem}
+.selo-pronto{background:rgba(46,125,224,.2);color:var(--azul-claro)}
+.selo-breve{background:#22385e;color:var(--suave)}
+.selo-oficial{background:#14532d;color:#a7f3c7}
+.botao{display:inline-block;background:var(--azul);color:#fff;border:none;font:inherit;font-weight:700;padding:.7rem 1.1rem;border-radius:10px;cursor:pointer;text-decoration:none;text-align:center}
+.botao:active{background:var(--azul-esc)}
+.botao.secundario{background:transparent;color:var(--azul-claro);border:2px solid var(--azul)}
+.botao.amarelo{background:var(--amarelo);color:#221c00}
+.botao.whats{background:var(--whats);color:#06300f}
+.botao.grande{display:block;width:100%;padding:.85rem 1.1rem;font-size:1.02rem}
+.botao.pequeno{padding:.35rem .7rem;font-size:.85rem}
+.barra-accao{display:flex;flex-wrap:wrap;gap:.6rem;margin-bottom:1rem}
+.barra-accao .botao{flex:1;min-width:200px}
+
+/* --- Página do exame (interface 2) --- */
+.cabecalho-exame{margin-bottom:1rem}
+.linha-exame{display:flex;gap:.9rem;align-items:center}
+.icone-exame{font-size:1.7rem;background:#1b3a68;border-radius:14px;width:60px;height:60px;display:flex;align-items:center;justify-content:center;flex:none}
+.cabecalho-exame h1{font-size:1.3rem;color:#fff;line-height:1.25}
+.cabecalho-exame .meta{color:var(--suave);font-size:.92rem;margin:.15rem 0 .4rem}
+.meta-exame{margin-top:.9rem;color:var(--suave);font-size:.92rem;border-top:1px solid var(--linha);padding-top:.7rem}
+.abas{display:flex;gap:.35rem;margin-bottom:1rem;background:var(--cartao2);border:1px solid var(--linha);border-radius:12px;padding:.35rem}
+.aba{flex:1;padding:.6rem .3rem;border-radius:9px;border:none;background:transparent;color:var(--suave);font:inherit;font-weight:700;cursor:pointer;font-size:.92rem}
+.aba.activa{background:var(--azul);color:#fff}
+.progresso{margin-bottom:1rem}
+.progresso .prog-cab{display:flex;justify-content:space-between;font-size:.85rem;color:var(--suave);margin-bottom:.35rem}
+.barra{height:8px;background:#1e3a63;border-radius:99px;overflow:hidden}
+.barra span{display:block;height:100%;background:var(--azul);border-radius:99px}
+
+/* --- Perguntas e resoluções --- */
+.pergunta{background:var(--cartao);border:1px solid var(--linha);border-radius:16px;padding:1rem;margin-bottom:.8rem}
 .pergunta .cab{display:flex;justify-content:space-between;margin-bottom:.45rem}
-.pergunta .num{font-weight:800;color:var(--verde-esc)}
+.pergunta .num{font-weight:800;color:var(--azul-claro)}
 .pergunta .cot{font-size:.8rem;color:var(--suave)}
 .enunciado{white-space:pre-wrap}
 .passos{margin:.6rem 0 .6rem 1.1rem}
 .passos li{margin-bottom:.35rem}
-.resposta{background:#e8f5ec;border-radius:8px;padding:.55rem .7rem;font-weight:700;color:var(--verde-esc)}
-.bloqueado{position:relative}
+.resposta{background:rgba(46,125,224,.16);border-left:4px solid var(--azul);border-radius:8px;padding:.55rem .7rem;font-weight:700;color:#cfe4ff}
 .blur{filter:blur(5px);user-select:none;pointer-events:none}
-.caixa-codigo{background:#fff8e1;border:1px solid #f0dfa0;border-radius:14px;padding:1rem;margin-bottom:.8rem;text-align:center}
-.caixa-codigo input{width:100%;max-width:320px;padding:.7rem;border:2px solid var(--linha);border-radius:10px;font:inherit;text-transform:uppercase;text-align:center;margin:.6rem 0}
+.amostra{font-size:.75rem;font-weight:700;color:#221c00;background:var(--amarelo);padding:.15rem .5rem;border-radius:99px}
+
+/* --- Desbloqueio (interface 4) --- */
+.caixa-codigo{background:var(--cartao);border:1px solid rgba(255,198,26,.45);border-radius:16px;padding:1.2rem 1rem;margin-bottom:.8rem;text-align:center}
+.caixa-codigo p{color:var(--suave)}
+.cadeado-icone{font-size:2.1rem;background:#1b3a68;width:72px;height:72px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto .7rem}
+.titulo-bloqueio{display:block;font-size:1.15rem;color:#fff;margin-bottom:.35rem}
+.caixa-codigo .botao.amarelo{margin:.9rem 0}
+.vantagens{list-style:none;text-align:left;max-width:320px;margin:0 auto .9rem;color:var(--texto)}
+.vantagens li{margin-bottom:.3rem}
+.caixa-codigo input{width:100%;max-width:320px;padding:.7rem;border:2px solid var(--linha);border-radius:10px;font:inherit;text-transform:uppercase;text-align:center;margin:.6rem 0;background:#0a1f3f;color:#fff}
 .msg-erro{color:var(--erro);font-weight:700}
-.msg-ok{color:var(--verde-esc);font-weight:700}
-.amostra{font-size:.75rem;font-weight:700;color:#8a6d00;background:#fff3c4;padding:.15rem .5rem;border-radius:99px}
-.voltar{background:none;border:none;font:inherit;color:var(--verde-esc);font-weight:700;cursor:pointer;padding:.4rem 0}
+.msg-ok{color:var(--verde);font-weight:700}
+.voltar{background:none;border:none;font:inherit;color:var(--azul-claro);font-weight:700;cursor:pointer;padding:.4rem 0}
 .rodape{max-width:760px;margin:0 auto;padding:1rem;color:var(--suave);font-size:.85rem}
 .aviso{font-size:.85rem;color:var(--suave);margin-top:.5rem}
-@media print{.topo,.abas,.caixa-codigo,.botao,.voltar{display:none}}
 
-/* Figuras (imagens) das perguntas */
-.figura { margin-top: .6rem; background: #fff; border: 1px solid #dbe7dd; border-radius: 10px; padding: .55rem; text-align: center; }
-.figura svg { max-width: 100%; height: auto; }
+/* --- Visualizador interno de PDF (interfaces 3 e 7) --- */
+.visor-vazio{background:var(--cartao);border:1px solid var(--linha);border-radius:16px;padding:1.4rem 1rem;text-align:center}
+.visor-vazio h3{color:#fff;margin-bottom:.4rem}
+.visor-vazio p{color:var(--suave);margin-bottom:.9rem}
+.visor{background:var(--cartao2);border:1px solid var(--linha);border-radius:16px;overflow:hidden}
+.visor-barra{display:flex;justify-content:space-between;align-items:center;gap:.6rem;padding:.55rem .8rem;background:#0a1c38;border-bottom:1px solid var(--linha)}
+.visor-titulo{font-weight:700;color:#fff;font-size:.92rem}
+.visor iframe{width:100%;height:72vh;border:0;background:#fff;display:block}
+.visor-nota{padding:.8rem;border-top:1px solid var(--linha)}
+.visor-nota p{color:var(--suave);font-size:.9rem;margin-bottom:.6rem}
+
+/* --- Vista de documento da resolução (interface 5) --- */
+.doc{background:#fff;border-radius:12px;padding:1.1rem 1rem;overflow:hidden}
+.doc .pdoc{font-family:Georgia,"Times New Roman",serif;color:#111;font-size:1rem;line-height:1.5}
+.doc .pdoc .pmarca{font-family:Arial,sans-serif;font-weight:bold;color:#123f7b;font-size:.85rem;border-bottom:2.5px solid #123f7b;padding-bottom:6px;margin-bottom:12px}
+.doc .pdoc h1{font-size:1.45rem;margin:0 0 2px}
+.doc .pdoc .psub{font-size:1.05rem;margin:0 0 2px;color:#123f7b;font-weight:bold}
+.doc .pdoc .pmeta{font-size:.88rem;color:#444;margin:0 0 14px}
+.doc .pdoc .pq{margin-bottom:14px}
+.doc .pdoc h3{font-size:1.08rem;margin:0 0 4px}
+.doc .pdoc .pcot{font-weight:normal;font-size:.85rem;color:#555}
+.doc .pdoc .penun{margin:0 0 6px;white-space:pre-wrap}
+.doc .pdoc ol{margin:4px 0 6px 18px;padding:0}
+.doc .pdoc .presp{background:#eef4fb;border-left:4px solid #123f7b;padding:6px 10px;margin:4px 0 0}
+.doc .pdoc .figura{border:none;padding:2px 0;text-align:left}
+.doc .pdoc .pfoot{margin-top:18px;font-size:.78rem;color:#666;border-top:1px solid #ccc;padding-top:6px}
+
+/* Figuras (imagens) das perguntas — fundo branco mantém os diagramas legíveis no tema escuro */
+.figura{margin-top:.6rem;background:#fff;border:1px solid #dbe7dd;border-radius:10px;padding:.55rem;text-align:center}
+.figura svg{max-width:100%;height:auto}
 
 /* ===== Área de impressão / PDF ===== */
-#print-area { display: none; }
-@media print {
-  body > header, body > main, body > footer { display: none !important; }
-  #print-area { display: block !important; }
-  .pdoc { font-family: Georgia, "Times New Roman", serif; color: #111; font-size: 12.5pt; line-height: 1.45; }
-  .pdoc .pmarca { font-family: Arial, sans-serif; font-weight: bold; color: #0b7a3e; font-size: 11pt; border-bottom: 2.5px solid #0b7a3e; padding-bottom: 6px; margin-bottom: 14px; }
-  .pdoc h1 { font-size: 19pt; margin: 0 0 2px; }
-  .pdoc .psub { font-size: 13.5pt; margin: 0 0 2px; color: #14532d; font-weight: bold; }
-  .pdoc .pmeta { font-size: 11pt; color: #444; margin: 0 0 16px; }
-  .pdoc .pq { page-break-inside: avoid; margin-bottom: 14px; }
-  .pdoc h3 { font-size: 13pt; margin: 0 0 4px; }
-  .pdoc .pcot { font-weight: normal; font-size: 10.5pt; color: #555; }
-  .pdoc .penun { margin: 0 0 6px; white-space: pre-wrap; }
-  .pdoc ol { margin: 4px 0 6px 18px; padding: 0; }
-  .pdoc .presp { background: #eef7f0; border-left: 4px solid #0b7a3e; padding: 6px 10px; margin: 4px 0 0; }
-  .pdoc .figura { border: none; padding: 2px 0; text-align: left; }
-  .pdoc .pfoot { margin-top: 20px; font-size: 9.5pt; color: #666; border-top: 1px solid #ccc; padding-top: 6px; }
+#print-area{display:none}
+@media print{
+  body > header, body > main, body > footer{display:none !important}
+  #print-area{display:block !important}
+  .pdoc{font-family:Georgia,"Times New Roman",serif;color:#111;font-size:12.5pt;line-height:1.45}
+  .pdoc .pmarca{font-family:Arial,sans-serif;font-weight:bold;color:#123f7b;font-size:11pt;border-bottom:2.5px solid #123f7b;padding-bottom:6px;margin-bottom:14px}
+  .pdoc h1{font-size:19pt;margin:0 0 2px}
+  .pdoc .psub{font-size:13.5pt;margin:0 0 2px;color:#123f7b;font-weight:bold}
+  .pdoc .pmeta{font-size:11pt;color:#444;margin:0 0 16px}
+  .pdoc .pq{page-break-inside:avoid;margin-bottom:14px}
+  .pdoc h3{font-size:13pt;margin:0 0 4px}
+  .pdoc .pcot{font-weight:normal;font-size:10.5pt;color:#555}
+  .pdoc .penun{margin:0 0 6px;white-space:pre-wrap}
+  .pdoc ol{margin:4px 0 6px 18px;padding:0}
+  .pdoc .presp{background:#eef4fb;border-left:4px solid #123f7b;padding:6px 10px;margin:4px 0 0}
+  .pdoc .figura{border:none;padding:2px 0;text-align:left}
+  .pdoc .pfoot{margin-top:20px;font-size:9.5pt;color:#666;border-top:1px solid #ccc;padding-top:6px}
 }

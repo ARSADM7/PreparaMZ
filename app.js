@@ -40,6 +40,22 @@ function figuraHTML(e, p, tipo) {
   return svg ? `<div class="figura">${svg}</div>` : "";
 }
 
+// ---------- Visualizador interno de PDF (interfaces 3 e 7) ----------
+// Incorporação nativa do URL do mozexames: o servidor não bloqueia frames.
+// O PDF só é pedido ao servidor quando esta vista é desenhada (lazy).
+// Se o navegador/Android não mostrar o PDF dentro da página, o botão
+// "Abrir PDF" fica sempre visível como recurso.
+function visorPDF(url, titulo, fecharFn) {
+  return `<div class="visor">
+    <div class="visor-barra"><span class="visor-titulo">📄 ${esc(titulo)}</span><button class="botao secundario pequeno" onclick="${fecharFn}">✕ Fechar</button></div>
+    <iframe src="${url}" title="${esc(titulo)}" loading="lazy"></iframe>
+    <div class="visor-nota">
+      <p>Se o documento não aparecer aqui dentro — alguns telemóveis Android abrem PDFs de outra forma — usa este botão:</p>
+      <a class="botao" href="${url}" target="_blank" rel="noopener">📄 Abrir PDF</a>
+    </div>
+  </div>`;
+}
+
 // ---------- Vista inicial ----------
 function vistaInicial() {
   actualizarEstado();
@@ -68,80 +84,153 @@ function vistaInicial() {
     <h2 class="titulo-seccao">Matemática — 10ª Classe · pronto agora</h2>
     ${prontos}
     <h2 class="titulo-seccao">Arquivo de exames originais (PDF oficial) — Matemática 10ª</h2>
-    <p class="aviso">Folhas de exame verdadeiras, digitalizadas (INEC/MINEDH), via arquivo público mozexames.com. As resoluções destes anos entram no PreparaMZ uma a uma.</p>
-    ${(window.ORIGINAIS || []).map(o => `<a class="cartao cartao-exame" href="${o.url}" target="_blank" rel="noopener"><span><span class="nome">Matemática ${o.ano} — ${esc(o.epoca)}</span><br><span class="meta">10ª Classe · exame original</span></span><span class="selo selo-pronto">PDF oficial</span></a>`).join("")}
+    <p class="aviso">Folhas de exame verdadeiras, digitalizadas (INEC/MINEDH), via arquivo público mozexames.com. Toca em "Ver original" para leres o PDF sem sair da app. As resoluções destes anos entram no PreparaMZ uma a uma.</p>
+    ${(window.ORIGINAIS || []).map((o, i) => `<button class="cartao cartao-exame" onclick="abrirOriginalArquivo(${i})"><span><span class="nome">Matemática ${o.ano} — ${esc(o.epoca)}</span><br><span class="meta">10ª Classe · exame original</span></span><span class="selo selo-pronto">Ver original</span></button>`).join("")}
     <h2 class="titulo-seccao">A caminho (2008–2025)</h2>
     ${breve}
     <p class="aviso">Novas resoluções entram todas as semanas, dos anos recentes para os mais antigos. Quem tem acesso completo recebe tudo sem pagar mais nesta época.</p>`;
 }
 
-// ---------- Vista de um exame ----------
+// ---------- Arquivo: original aberto dentro da app (interface 7) ----------
+function abrirOriginalArquivo(i) {
+  const o = (window.ORIGINAIS || [])[i];
+  if (!o) return;
+  actualizarEstado();
+  const titulo = `Matemática ${o.ano} — ${o.epoca}`;
+  app.innerHTML = `
+    <button class="voltar" onclick="vistaInicial()">← Arquivo de originais</button>
+    <section class="hero">
+      <h1>Exame original — ${esc(titulo)}</h1>
+      <p>10ª Classe · folha de exame oficial digitalizada (INEC/MINEDH), via arquivo público mozexames.com.</p>
+    </section>
+    ${visorPDF(o.url, titulo, "vistaInicial()")}
+    <p class="aviso">O original é o documento oficial, tal como foi digitalizado. As resoluções do PreparaMZ são separadas e escritas pela nossa equipa.</p>`;
+  window.scrollTo(0, 0);
+}
+
+// ---------- Vista de um exame (interface 2) ----------
 let exameActual = null;
-let abaActual = "enunciado";
+let abaActual = "perguntas";
+let originalAberto = false;
 
 function abrirExame(id) {
   exameActual = window.EXAMES.find(e => e.id === id);
-  abaActual = "enunciado";
+  abaActual = "perguntas";
+  originalAberto = false;
   desenharExame();
   window.scrollTo(0, 0);
 }
 
-function mudarAba(aba) { abaActual = aba; desenharExame(); }
+function mudarAba(aba) {
+  abaActual = aba;
+  if (aba !== "original") originalAberto = false;
+  desenharExame();
+}
 
-function desenharExame() {
-  actualizarEstado();
-  const e = exameActual;
-  let corpo = "";
-  if (abaActual === "enunciado") {
-    corpo = `<button class="botao" onclick="imprimirPDF('enunciado')">📄 Guardar enunciado em PDF (grátis)</button>` + (e.originalPdf ? `<a class="botao" href="${e.originalPdf}" target="_blank" rel="noopener">📄 Exame original (PDF oficial)</a>` : "") + e.perguntas.map(p => `
+function progressoHTML(rotulo, feitos, total) {
+  const pct = total > 0 ? Math.round(feitos / total * 100) : 0;
+  return `<div class="progresso"><div class="prog-cab"><span>${rotulo}</span><span>${feitos} de ${total}</span></div><div class="barra"><span style="width:${pct}%"></span></div></div>`;
+}
+
+function perguntasHTML(e) {
+  return e.perguntas.map(p => `
       <article class="pergunta">
         <div class="cab"><span class="num">Pergunta ${p.numero}</span>${p.cotacao ? `<span class="cot">Cotação: ${esc(p.cotacao)} valores</span>` : ""}</div>
         <div class="enunciado">${esc(p.enunciado)}</div>${figuraHTML(e, p, "enunciado")}
-      </article>`).join("") +
-      `<p class="aviso">Fonte: ${esc(e.fonteEnunciado)}. Duração: ${esc(e.duracao)}.</p>`;
-  } else {
-    const livre = temAcesso();
-    corpo = e.perguntas.map((p, i) => {
-      const amostra = i === 0; // primeira pergunta resolvida é grátis
-      const visivel = livre || amostra;
-      const resolucao = visivel ? `
+      </article>`).join("");
+}
+
+function resolucaoHTML(e, livre) {
+  return e.perguntas.map((p, i) => {
+    const amostra = i === 0; // primeira pergunta resolvida é grátis
+    const visivel = livre || amostra;
+    const resolucao = visivel ? `
         ${figuraHTML(e, p, "resolucao")}
         <ol class="passos">${p.passos.map(s => `<li>${esc(s)}</li>`).join("")}</ol>
         <div class="resposta">Resposta: ${esc(p.resposta)}</div>` : `
         <div class="blur"><ol class="passos"><li>Resolução passo a passo desta pergunta…</li><li>Explicação completa com todos os cálculos…</li></ol>
         <div class="resposta">Resposta: …</div></div>`;
-      return `<article class="pergunta">
+    return `<article class="pergunta">
         <div class="cab"><span class="num">Pergunta ${p.numero} — resolução</span>${amostra && !livre ? '<span class="amostra">AMOSTRA GRÁTIS</span>' : ""}</div>
         <div class="enunciado">${esc(p.enunciado)}</div>${figuraHTML(e, p, "enunciado")}
         ${resolucao}
       </article>`;
-    }).join("");
-    if (!livre) corpo = caixaCodigo() + corpo;
-    else corpo = `<button class="botao" onclick="imprimirPDF('resolvido')">📄 Guardar resolução em PDF</button>` + corpo;
+  }).join("");
+}
+
+function desenharExame() {
+  actualizarEstado();
+  const e = exameActual;
+  let corpo = "";
+  if (abaActual === "perguntas") {
+    corpo = progressoHTML("Conteúdo disponível — perguntas", e.perguntas.length, e.totalPerguntas)
+      + `<div class="barra-accao"><button class="botao" onclick="imprimirPDF('enunciado')">📄 Guardar enunciado em PDF (grátis)</button></div>`
+      + perguntasHTML(e)
+      + `<p class="aviso">Fonte: ${esc(e.fonteEnunciado)}. Duração: ${esc(e.duracao)}.</p>`;
+  } else if (abaActual === "original") {
+    if (!e.originalPdf) {
+      corpo = `<div class="visor-vazio"><h3>Enunciado original</h3><p>O PDF oficial deste exame ainda não está disponível na app.</p></div>`;
+    } else if (!originalAberto) {
+      corpo = `<div class="visor-vazio">
+        <div class="cadeado-icone">📄</div>
+        <h3>Enunciado original (PDF oficial)</h3>
+        <p>Folha de exame oficial digitalizada (INEC/MINEDH), servida pelo arquivo mozexames.com. O documento carrega apenas quando tocares no botão — assim poupas dados e a página abre depressa.</p>
+        <button class="botao" onclick="originalAberto=true;desenharExame()">📄 Ver enunciado original</button>
+        <p class="aviso">Fonte: ${esc(e.fonteEnunciado)}.</p>
+      </div>`;
+    } else {
+      corpo = visorPDF(e.originalPdf, `${e.disciplina} ${e.ano} — ${e.chamada} · enunciado original`, "originalAberto=false;desenharExame()");
+    }
+  } else { // resolução
+    const livre = temAcesso();
+    if (!livre) {
+      corpo = progressoHTML("Conteúdo disponível — resolução (amostra grátis)", 1, e.totalPerguntas)
+        + caixaCodigo() + resolucaoHTML(e, false);
+    } else {
+      corpo = progressoHTML("Conteúdo disponível — resolução completa", e.totalPerguntas, e.totalPerguntas)
+        + `<div class="barra-accao"><button class="botao" onclick="vistaDocumentoResolucao()">📖 Ver resolução em documento</button><button class="botao secundario" onclick="imprimirPDF('resolvido')">📄 Guardar resolução em PDF</button></div>`
+        + resolucaoHTML(e, true);
+    }
   }
   app.innerHTML = `
     <button class="voltar" onclick="vistaInicial()">← Todos os exames</button>
-    <section class="hero">
-      <h1>${esc(e.disciplina)} ${e.ano} — ${esc(e.chamada)}</h1>
-      <p>${esc(e.classe)} · Exame Final · ${esc(e.duracao)} · ${e.totalPerguntas} perguntas</p>
+    <section class="cartao cabecalho-exame">
+      <div class="linha-exame">
+        <div class="icone-exame">🧮</div>
+        <div>
+          <h1>${esc(e.disciplina)} ${e.ano}</h1>
+          <p class="meta">${esc(e.classe)} · ${esc(e.chamada)}</p>
+          <span class="selo selo-oficial">Exame oficial</span>
+        </div>
+      </div>
+      <p class="meta-exame">${e.totalPerguntas} perguntas · Duração: ${esc(e.duracao)} · Exame Final</p>
     </section>
     <div class="abas">
-      <button class="aba ${abaActual === "enunciado" ? "activa" : ""}" onclick="mudarAba('enunciado')">📄 Por resolver (grátis)</button>
-      <button class="aba ${abaActual === "resolvido" ? "activa" : ""}" onclick="mudarAba('resolvido')">✅ Resolvido (${CONFIG.preco})</button>
+      <button class="aba ${abaActual === "perguntas" ? "activa" : ""}" onclick="mudarAba('perguntas')">Perguntas</button>
+      <button class="aba ${abaActual === "original" ? "activa" : ""}" onclick="mudarAba('original')">Enunciado original</button>
+      <button class="aba ${abaActual === "resolvido" ? "activa" : ""}" onclick="mudarAba('resolvido')">Resolução</button>
     </div>
     ${corpo}`;
 }
 
 function caixaCodigo() {
   const botaoCompra = CONFIG.whatsapp
-    ? `<a class="botao whats" href="https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(CONFIG.mensagemCompra)}" target="_blank" rel="noopener">💬 Comprar código no WhatsApp — ${CONFIG.preco}</a><br>` : "";
+    ? `<a class="botao amarelo grande" href="https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(CONFIG.mensagemCompra)}" target="_blank" rel="noopener">🪙 ${CONFIG.preco} &nbsp;·&nbsp; Desbloquear resolução</a>` : "";
   return `<div class="caixa-codigo">
-    <strong>🔒 Resoluções completas bloqueadas</strong>
-    <p>A pergunta 1 está aberta como amostra. Para abrir todas, compra o código (${CONFIG.preco}, transferência M-Pesa/e-Mola) e escreve-o aqui:</p>
+    <div class="cadeado-icone">🔒</div>
+    <strong class="titulo-bloqueio">Resolução bloqueada</strong>
+    <p>Para veres a resolução completa deste exame, precisas de desbloquear o acesso. A pergunta 1 está aberta como amostra grátis.</p>
     ${botaoCompra}
+    <ul class="vantagens">
+      <li>✔️ Pagamento seguro por transferência (M-Pesa/e-Mola)</li>
+      <li>✔️ Acesso imediato com o código</li>
+      <li>✔️ Válido para todos os exames desta época</li>
+    </ul>
+    <p>Já tens o código? Escreve-o aqui:</p>
     <input id="input-codigo" placeholder="PMZ10-XXXXXX" autocomplete="off">
     <button class="botao" onclick="tentarDesbloquear()">Desbloquear</button>
     <p id="msg-codigo"></p>
+    <p class="aviso">Após o pagamento e o desbloqueio, a resolução fica disponível nesta página e podes aceder sempre que quiseres neste telemóvel.</p>
   </div>`;
 }
 
@@ -160,11 +249,9 @@ async function tentarDesbloquear() {
 }
 
 
-// ---------- PDF (guardar enunciado / resolução como PDF) ----------
-function imprimirPDF(tipo) {
+// ---------- Documento (vista em ecrã + imprimir/guardar em PDF) ----------
+function documentoHTML(tipo) {
   const e = exameActual;
-  if (!e) return;
-  if (tipo === "resolvido" && !temAcesso()) return;
   const titulo = `${e.disciplina} ${e.ano} — ${e.chamada}`;
   const subtitulo = tipo === "resolvido" ? "Resolução passo a passo" : "Enunciado (por resolver)";
   const meta = `${e.classe} · Exame Final${e.duracao ? " · " + e.duracao : ""} · ${e.totalPerguntas} perguntas`;
@@ -175,8 +262,7 @@ function imprimirPDF(tipo) {
     const passos = p.passos.map(x => `<li>${esc(x)}</li>`).join("");
     return `<div class="pq">${cab}${enun}${figuraHTML(e, p, "resolucao")}<ol>${passos}</ol><p class="presp"><strong>Resposta:</strong> ${esc(p.resposta)}</p></div>`;
   }).join("");
-  document.getElementById("print-area").innerHTML = `
-    <div class="pdoc">
+  return `<div class="pdoc">
       <div class="pmarca">📚 PreparaMZ — Exames Resolvidos de Moçambique</div>
       <h1>${esc(titulo)}</h1>
       <p class="psub">${subtitulo}</p>
@@ -184,6 +270,29 @@ function imprimirPDF(tipo) {
       ${partes}
       <p class="pfoot">Enunciado: exame oficial (INEC/MINEDH). Resoluções: equipa PreparaMZ. · PreparaMZ — acesso completo por ${CONFIG.preco} no WhatsApp.</p>
     </div>`;
+}
+
+// Vista de documento da resolução dentro da app (interface 5) — só com acesso.
+function vistaDocumentoResolucao() {
+  if (!exameActual || !temAcesso()) return;
+  actualizarEstado();
+  const e = exameActual;
+  app.innerHTML = `
+    <button class="voltar" onclick="desenharExame()">← Voltar ao exame</button>
+    <section class="hero">
+      <h1>Resolução — ${esc(e.disciplina)} ${e.ano} · ${esc(e.chamada)}</h1>
+      <p>Documento completo, página a página, dentro da app. Os originais oficiais ficam separados, no separador "Enunciado original".</p>
+    </section>
+    <div class="barra-accao"><button class="botao" onclick="imprimirPDF('resolvido')">📄 Guardar resolução em PDF</button></div>
+    <div class="doc">${documentoHTML("resolvido")}</div>`;
+  window.scrollTo(0, 0);
+}
+
+function imprimirPDF(tipo) {
+  const e = exameActual;
+  if (!e) return;
+  if (tipo === "resolvido" && !temAcesso()) return;
+  document.getElementById("print-area").innerHTML = documentoHTML(tipo);
   window.print();
 }
 
