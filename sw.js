@@ -1,4 +1,4 @@
-const CACHE = "preparamz-v7";
+const CACHE = "preparamz-v8";
 const FICHEIROS = [".", "index.html", "style.css", "app.js", "data/exames.js", "data/figuras.js", "manifest.webmanifest", "icon.svg"];
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(FICHEIROS)).then(() => self.skipWaiting()));

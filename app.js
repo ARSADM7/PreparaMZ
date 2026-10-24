@@ -75,14 +75,17 @@ function vistaInicial() {
     ? `<a class="botao whats" href="https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(CONFIG.mensagemCompra)}" target="_blank" rel="noopener">💬 Comprar acesso no WhatsApp — ${CONFIG.preco}</a>`
     : "";
   app.innerHTML = `
-    <section class="hero">
+    <section class="faixa">
       <h1>Exames de Moçambique resolvidos passo a passo</h1>
-      <p>O enunciado é <strong>grátis</strong>. A resolução completa, explicada pergunta por pergunta, desbloqueia com um código.</p>
       <span class="preco">Acesso completo: ${CONFIG.preco}</span>
-      <div style="margin-top:.8rem">${botaoCompra}</div>
     </section>
     <h2 class="titulo-seccao">Matemática — 10ª Classe · pronto agora</h2>
     ${prontos}
+    <section class="cartao cartao-compra">
+      <h2>🔓 Acesso completo — ${CONFIG.preco}</h2>
+      <p>O enunciado de cada exame é <strong>grátis</strong>. Com o acesso completo desbloqueias, com um código, a resolução passo a passo de <strong>todos os exames</strong> — e o acesso fica guardado neste telemóvel.</p>
+      ${botaoCompra ? `<div style="margin-top:.8rem">${botaoCompra}</div>` : ""}
+    </section>
     <h2 class="titulo-seccao">Arquivo de exames originais (PDF oficial) — Matemática 10ª</h2>
     <p class="aviso">Folhas de exame verdadeiras, digitalizadas (INEC/MINEDH), via arquivo público mozexames.com. Toca em "Ver original" para leres o PDF sem sair da app. As resoluções destes anos entram no PreparaMZ uma a uma.</p>
     ${(window.ORIGINAIS || []).map((o, i) => `<button class="cartao cartao-exame" onclick="abrirOriginalArquivo(${i})"><span><span class="nome">Matemática ${o.ano} — ${esc(o.epoca)}</span><br><span class="meta">10ª Classe · exame original</span></span><span class="selo selo-pronto">Ver original</span></button>`).join("")}
@@ -112,11 +115,36 @@ function abrirOriginalArquivo(i) {
 let exameActual = null;
 let abaActual = "perguntas";
 let originalAberto = false;
+let perguntaActual = 0;
+
+// ---------- Retomar: última posição de estudo (exame/separador/pergunta) ----------
+const CHAVE_RETOMAR = "preparamz_retomar";
+
+function guardarRetomar() {
+  if (!exameActual) return;
+  try {
+    localStorage.setItem(CHAVE_RETOMAR, JSON.stringify({ exame: exameActual.id, aba: abaActual, pergunta: perguntaActual }));
+  } catch (e) { /* armazenamento indisponível: a app continua sem retomar */ }
+}
+
+function lerRetomar() {
+  try { return JSON.parse(localStorage.getItem(CHAVE_RETOMAR) || "null"); }
+  catch (e) { return null; }
+}
 
 function abrirExame(id) {
   exameActual = window.EXAMES.find(e => e.id === id);
   abaActual = "perguntas";
+  perguntaActual = 0;
   originalAberto = false;
+  const salvo = lerRetomar();
+  if (salvo && salvo.exame === id) {
+    if (["perguntas", "original", "resolvido"].includes(salvo.aba)) abaActual = salvo.aba;
+    if (Number.isInteger(salvo.pergunta)) {
+      perguntaActual = Math.max(0, Math.min(salvo.pergunta, exameActual.perguntas.length - 1));
+    }
+  }
+  guardarRetomar();
   desenharExame();
   window.scrollTo(0, 0);
 }
@@ -124,38 +152,77 @@ function abrirExame(id) {
 function mudarAba(aba) {
   abaActual = aba;
   if (aba !== "original") originalAberto = false;
+  guardarRetomar();
   desenharExame();
 }
+
+// ---------- Navegação pergunta a pergunta ----------
+function irPergunta(i) {
+  if (!exameActual) return;
+  perguntaActual = Math.max(0, Math.min(i, exameActual.perguntas.length - 1));
+  guardarRetomar();
+  desenharExame();
+}
+
+function perguntaAnterior() { irPergunta(perguntaActual - 1); }
+function perguntaProxima() { irPergunta(perguntaActual + 1); }
 
 function progressoHTML(rotulo, feitos, total) {
   const pct = total > 0 ? Math.round(feitos / total * 100) : 0;
   return `<div class="progresso"><div class="prog-cab"><span>${rotulo}</span><span>${feitos} de ${total}</span></div><div class="barra"><span style="width:${pct}%"></span></div></div>`;
 }
 
-function perguntasHTML(e) {
-  return e.perguntas.map(p => `
-      <article class="pergunta">
-        <div class="cab"><span class="num">Pergunta ${p.numero}</span>${p.cotacao ? `<span class="cot">Cotação: ${esc(p.cotacao)} valores</span>` : ""}</div>
-        <div class="enunciado">${esc(p.enunciado)}</div>${figuraHTML(e, p, "enunciado")}
-      </article>`).join("");
+// Índice compacto 1–10 para saltar para qualquer pergunta.
+// Na Resolução sem acesso, as bloqueadas mostram cadeado e a P1 marca a amostra.
+function indiceHTML(e, modo, livre) {
+  const botoes = e.perguntas.map((p, i) => {
+    const bloqueada = modo === "resolvido" && !livre && i > 0;
+    const amostra = modo === "resolvido" && !livre && i === 0;
+    const cls = ["indice-num", i === perguntaActual ? "activa" : "", bloqueada ? "bloqueada" : "", amostra ? "amostra-num" : ""].join(" ");
+    const extra = bloqueada ? ' <span class="cadeado">🔒</span>' : "";
+    const titulo = bloqueada ? `Pergunta ${p.numero} — resolução bloqueada` : (amostra ? `Pergunta ${p.numero} — amostra grátis` : `Pergunta ${p.numero}`);
+    return `<button class="${cls}" onclick="irPergunta(${i})" title="${titulo}" aria-label="${titulo}">${p.numero}${extra}</button>`;
+  }).join("");
+  return `<nav class="indice" aria-label="Índice de perguntas">${botoes}</nav>`;
 }
 
-function resolucaoHTML(e, livre) {
-  return e.perguntas.map((p, i) => {
-    const amostra = i === 0; // primeira pergunta resolvida é grátis
-    const visivel = livre || amostra;
-    const resolucao = visivel ? `
+function navegacaoHTML(e) {
+  const primeiro = perguntaActual === 0;
+  const ultimo = perguntaActual === e.perguntas.length - 1;
+  return `<div class="nav-perguntas">
+    <button class="botao secundario" onclick="perguntaAnterior()" ${primeiro ? "disabled" : ""}>← Anterior</button>
+    <span class="posicao">Pergunta ${perguntaActual + 1} de ${e.totalPerguntas}</span>
+    <button class="botao" onclick="perguntaProxima()" ${ultimo ? "disabled" : ""}>Próxima →</button>
+  </div>`;
+}
+
+function perguntaFocadaHTML(e) {
+  const p = e.perguntas[perguntaActual];
+  return `<article class="pergunta">
+        <div class="cab"><span class="num">Pergunta ${p.numero}</span>${p.cotacao ? `<span class="cot">Cotação: ${esc(p.cotacao)} valores</span>` : ""}</div>
+        <div class="enunciado">${esc(p.enunciado)}</div>${figuraHTML(e, p, "enunciado")}
+      </article>`;
+}
+
+function resolucaoFocadaHTML(e, livre) {
+  const p = e.perguntas[perguntaActual];
+  const amostra = perguntaActual === 0; // primeira pergunta resolvida é grátis
+  const visivel = livre || amostra;
+  let corpoResolucao;
+  if (visivel) {
+    corpoResolucao = `
         ${figuraHTML(e, p, "resolucao")}
         <ol class="passos">${p.passos.map(s => `<li>${esc(s)}</li>`).join("")}</ol>
-        <div class="resposta">Resposta: ${esc(p.resposta)}</div>` : `
-        <div class="blur"><ol class="passos"><li>Resolução passo a passo desta pergunta…</li><li>Explicação completa com todos os cálculos…</li></ol>
-        <div class="resposta">Resposta: …</div></div>`;
-    return `<article class="pergunta">
+        <div class="resposta">Resposta: ${esc(p.resposta)}</div>`;
+  } else {
+    // Desbloqueio no sítio certo: painel dentro da própria pergunta bloqueada.
+    corpoResolucao = caixaCodigo();
+  }
+  return `<article class="pergunta">
         <div class="cab"><span class="num">Pergunta ${p.numero} — resolução</span>${amostra && !livre ? '<span class="amostra">AMOSTRA GRÁTIS</span>' : ""}</div>
         <div class="enunciado">${esc(p.enunciado)}</div>${figuraHTML(e, p, "enunciado")}
-        ${resolucao}
+        ${corpoResolucao}
       </article>`;
-  }).join("");
 }
 
 function desenharExame() {
@@ -163,9 +230,11 @@ function desenharExame() {
   const e = exameActual;
   let corpo = "";
   if (abaActual === "perguntas") {
-    corpo = progressoHTML("Conteúdo disponível — perguntas", e.perguntas.length, e.totalPerguntas)
+    corpo = progressoHTML("Posição no exame", perguntaActual + 1, e.totalPerguntas)
       + `<div class="barra-accao"><button class="botao" onclick="imprimirPDF('enunciado')">📄 Guardar enunciado em PDF (grátis)</button></div>`
-      + perguntasHTML(e)
+      + indiceHTML(e, "perguntas", true)
+      + perguntaFocadaHTML(e)
+      + navegacaoHTML(e)
       + `<p class="aviso">Fonte: ${esc(e.fonteEnunciado)}. Duração: ${esc(e.duracao)}.</p>`;
   } else if (abaActual === "original") {
     if (!e.originalPdf) {
@@ -184,12 +253,16 @@ function desenharExame() {
   } else { // resolução
     const livre = temAcesso();
     if (!livre) {
-      corpo = progressoHTML("Conteúdo disponível — resolução (amostra grátis)", 1, e.totalPerguntas)
-        + caixaCodigo() + resolucaoHTML(e, false);
+      corpo = progressoHTML("Posição no exame", perguntaActual + 1, e.totalPerguntas)
+        + indiceHTML(e, "resolvido", false)
+        + resolucaoFocadaHTML(e, false)
+        + navegacaoHTML(e);
     } else {
-      corpo = progressoHTML("Conteúdo disponível — resolução completa", e.totalPerguntas, e.totalPerguntas)
+      corpo = progressoHTML("Posição no exame", perguntaActual + 1, e.totalPerguntas)
         + `<div class="barra-accao"><button class="botao" onclick="vistaDocumentoResolucao()">📖 Ver resolução em documento</button><button class="botao secundario" onclick="imprimirPDF('resolvido')">📄 Guardar resolução em PDF</button></div>`
-        + resolucaoHTML(e, true);
+        + indiceHTML(e, "resolvido", true)
+        + resolucaoFocadaHTML(e, true)
+        + navegacaoHTML(e);
     }
   }
   app.innerHTML = `
@@ -219,7 +292,7 @@ function caixaCodigo() {
   return `<div class="caixa-codigo">
     <div class="cadeado-icone">🔒</div>
     <strong class="titulo-bloqueio">Resolução bloqueada</strong>
-    <p>Para veres a resolução completa deste exame, precisas de desbloquear o acesso. A pergunta 1 está aberta como amostra grátis.</p>
+    <p>Os ${CONFIG.preco} desbloqueiam <strong>todas as resoluções de todos os exames</strong>, e o acesso fica guardado neste telemóvel. A pergunta 1 deste exame está aberta como amostra grátis.</p>
     ${botaoCompra}
     <ul class="vantagens">
       <li>✔️ Pagamento seguro por transferência (M-Pesa/e-Mola)</li>
