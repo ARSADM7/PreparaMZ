@@ -136,5 +136,74 @@ window.FIGURAS = {
   </g>
 </svg>`
     }
+  },
+  "mat-10-2023-1": {
+    "2": {
+      enunciado: `<svg viewBox="0 0 300 230" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagrama de Venn com três conjuntos: Matemática, Português e Inglês">
+  <rect x="8" y="8" width="284" height="214" rx="10" fill="#f8fafc" stroke="#94a3b8"/>
+  <text x="20" y="30" font-size="13" fill="#334155">U = ?</text>
+  <circle cx="115" cy="95" r="52" fill="rgba(11,122,62,0.10)" stroke="#0b7a3e" stroke-width="1.6"/>
+  <circle cx="185" cy="95" r="52" fill="rgba(37,99,235,0.08)" stroke="#2563eb" stroke-width="1.6"/>
+  <circle cx="150" cy="148" r="52" fill="rgba(217,119,6,0.10)" stroke="#d97706" stroke-width="1.6"/>
+  <text x="76" y="62" font-size="15" font-weight="bold" fill="#0b7a3e">M</text>
+  <text x="216" y="62" font-size="15" font-weight="bold" fill="#2563eb">P</text>
+  <text x="144" y="208" font-size="15" font-weight="bold" fill="#d97706">I</text>
+  <g font-size="13.5" font-weight="bold" fill="#14532d" text-anchor="middle">
+    <text x="150" y="127">1030</text>
+    <text x="150" y="86">198</text>
+    <text x="113" y="143">155</text>
+    <text x="187" y="143">120</text>
+    <text x="82" y="106">90</text>
+    <text x="218" y="106">85</text>
+    <text x="150" y="184">52</text>
+  </g>
+</svg>`,
+      resolucao: `<svg viewBox="0 0 300 230" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagrama de Venn preenchido com o total da escola">
+  <rect x="8" y="8" width="284" height="214" rx="10" fill="#f8fafc" stroke="#94a3b8"/>
+  <text x="20" y="30" font-size="13" fill="#334155">U = ?</text>
+  <text x="284" y="30" font-size="12.5" fill="#b91c1c" text-anchor="end">U = 1730</text>
+  <circle cx="115" cy="95" r="52" fill="rgba(11,122,62,0.10)" stroke="#0b7a3e" stroke-width="1.6"/>
+  <circle cx="185" cy="95" r="52" fill="rgba(37,99,235,0.08)" stroke="#2563eb" stroke-width="1.6"/>
+  <circle cx="150" cy="148" r="52" fill="rgba(217,119,6,0.10)" stroke="#d97706" stroke-width="1.6"/>
+  <text x="76" y="62" font-size="15" font-weight="bold" fill="#0b7a3e">M</text>
+  <text x="216" y="62" font-size="15" font-weight="bold" fill="#2563eb">P</text>
+  <text x="144" y="208" font-size="15" font-weight="bold" fill="#d97706">I</text>
+  <g font-size="13.5" font-weight="bold" fill="#14532d" text-anchor="middle">
+    <text x="150" y="127">1030</text>
+    <text x="150" y="86">198</text>
+    <text x="113" y="143">155</text>
+    <text x="187" y="143">120</text>
+    <text x="82" y="106">90</text>
+    <text x="218" y="106">85</text>
+    <text x="150" y="184">52</text>
+  </g>
+</svg>`
+    },
+    "10": {
+      enunciado: `<svg viewBox="0 0 300 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Gráfico da função g de x: parábola com vértice em 2, 1">
+  <line x1="75" y1="12" x2="75" y2="228" stroke="#334155" stroke-width="1.4"/>
+  <line x1="12" y1="185" x2="292" y2="185" stroke="#334155" stroke-width="1.4"/>
+  <text x="282" y="178" font-size="13" fill="#334155">x</text>
+  <text x="82" y="22" font-size="13" fill="#334155">y</text>
+  <path d="M58,45 Q110,168 151,164 Q192,168 244,45" fill="none" stroke="#0b7a3e" stroke-width="2.4"/>
+  <line x1="75" y1="80" x2="227" y2="80" stroke="#94a3b8" stroke-width="1.1" stroke-dasharray="4 4"/>
+  <line x1="227" y1="80" x2="227" y2="185" stroke="#94a3b8" stroke-width="1.1" stroke-dasharray="4 4"/>
+  <line x1="75" y1="164" x2="151" y2="164" stroke="#94a3b8" stroke-width="1.1" stroke-dasharray="4 4"/>
+  <line x1="151" y1="164" x2="151" y2="185" stroke="#94a3b8" stroke-width="1.1" stroke-dasharray="4 4"/>
+  <g fill="#b91c1c">
+    <circle cx="75" cy="80" r="3.4"/><circle cx="151" cy="164" r="3.4"/><circle cx="227" cy="80" r="3.4"/>
+  </g>
+  <g font-size="12" fill="#14532d">
+    <text x="58" y="84">5</text>
+    <text x="58" y="168">1</text>
+    <text x="50" y="210">−1</text>
+    <text x="30" y="200">−1</text>
+    <text x="64" y="200">0</text>
+    <text x="146" y="200">2</text>
+    <text x="222" y="200">4</text>
+    <text x="160" y="150">V(2, 1)</text>
+  </g>
+</svg>`
+    }
   }
 };

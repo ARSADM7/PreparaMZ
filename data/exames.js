@@ -249,12 +249,135 @@ window.EXAMES = [
         resposta: "a) Moda = 3 idas  ·  b) Mediana = 3 idas"
       }
     ]
+  },
+  {
+    id: "mat-10-2023-1",
+    disciplina: "Matemática",
+    classe: "10ª Classe",
+    ano: 2023,
+    chamada: "1ª Chamada",
+    duracao: "120 Minutos",
+    totalPerguntas: 10,
+    fonteEnunciado: "Exame Final oficial ES1/2023, Instituto Nacional de Exames, Certificação e Equivalências (Moçambique)",
+    originalPdf: "https://storage.mozexames.com/papers/213396d2-0a5f-4a2b-b991-9d9e35f31cea/question.pdf",
+    perguntas: [
+      {
+        numero: 1, cotacao: "2,0",
+        enunciado: "Com os símbolos ∈, ∉, ⊂, ⊄, ⊃ e ⊅, complete na sua folha de respostas os espaços em branco de modo a obter proposições verdadeiras:\na) π ___ ℚ\nb) 7,52 ___ ℝ\nc) ℚ ___ ℤ\nd) {9/3; √4; 3} ___ ℝ",
+        passos: [
+          "Primeiro decide o tipo de comparação: elemento com conjunto usa ∈ ou ∉; conjunto com conjunto usa ⊂, ⊄, ⊃ ou ⊅.",
+          "a) π = 3,14159… é uma dízima infinita não periódica, logo é irracional e não pertence aos racionais: π ∉ ℚ.",
+          "b) 7,52 é uma dízima finita: é um número racional e, portanto, também é real: 7,52 ∈ ℝ.",
+          "c) Todo o número inteiro pode ser escrito como fracção de denominador 1, logo ℤ está contido em ℚ, ou seja, ℚ contém ℤ: ℚ ⊃ ℤ.",
+          "d) Simplifica os elementos: 9/3 = 3 e √4 = 2, por isso o conjunto é {3; 2}. Como 2 e 3 são números reais, o conjunto está contido em ℝ: {9/3; √4; 3} ⊂ ℝ."
+        ],
+        resposta: "a) ∉  ·  b) ∈  ·  c) ⊃  ·  d) ⊂"
+      },
+      {
+        numero: 2, cotacao: "2,0",
+        enunciado: "A figura mostra a distribuição de alunos de uma certa escola que estudam as disciplinas de Língua Portuguesa (P), Língua Inglesa (I) e Matemática (M). Quantos alunos estudam:\na) nesta escola?\nb) só Língua Portuguesa?",
+        passos: [
+          "Lê cada região do diagrama (valores da figura): só Matemática = 90; só Português = 85; só Inglês = 52; Matemática e Português, sem Inglês = 198; Matemática e Inglês, sem Português = 155; Português e Inglês, sem Matemática = 120; as três disciplinas = 1030.",
+          "a) O total da escola é a soma de todas as regiões, porque cada aluno aparece numa só região: 90 + 85 + 52 + 198 + 155 + 120 + 1030 = 1730.",
+          "Verificação por grupos: só uma disciplina = 90 + 85 + 52 = 227; exactamente duas disciplinas = 198 + 155 + 120 = 473; as três = 1030. Total: 227 + 473 + 1030 = 1730.",
+          "b) «Só Língua Portuguesa» é a região exclusiva do círculo P, sem nenhuma intersecção: são 85 alunos."
+        ],
+        resposta: "a) 1730 alunos  ·  b) 85 alunos"
+      },
+      {
+        numero: 3, cotacao: "2,0",
+        enunciado: "Calcule o valor de m, de modo que o produto das raízes da equação 2x² − 6x + 3m + 2 = 0 seja igual a 5.",
+        passos: [
+          "Numa equação ax² + bx + c = 0, o produto das raízes é dado por P = c/a (relações de Girard).",
+          "Nesta equação, a = 2 e c = 3m + 2, logo P = (3m + 2)/2.",
+          "Impõe o produto igual a 5: (3m + 2)/2 = 5 → 3m + 2 = 10 → 3m = 8 → m = 8/3.",
+          "Verificação: com m = 8/3, tem-se c = 3 × (8/3) + 2 = 10 e P = 10/2 = 5, tal como pedido."
+        ],
+        resposta: "m = 8/3"
+      },
+      {
+        numero: 4, cotacao: "2,0",
+        enunciado: "Determine o conjunto solução da inequação 3x² − 5x + 2 < 0.",
+        passos: [
+          "Resolve primeiro a equação associada 3x² − 5x + 2 = 0. Discriminante: Δ = (−5)² − 4 × 3 × 2 = 25 − 24 = 1.",
+          "Raízes: x = (5 ± 1)/6, ou seja, x₁ = 4/6 = 2/3 e x₂ = 6/6 = 1.",
+          "Como a = 3 > 0, a parábola tem a concavidade para cima: a função é negativa entre as raízes e positiva fora delas.",
+          "Verificação com um valor intermédio: para x = 0,8, obtém-se 3 × 0,64 − 5 × 0,8 + 2 = −0,08 < 0, o que confirma o intervalo."
+        ],
+        resposta: "S = {x ∈ ℝ : 2/3 < x < 1}, ou seja, S = ]2/3, 1["
+      },
+      {
+        numero: 5, cotacao: "1,5",
+        enunciado: "Resolva a equação logₓ 4 = 2, sabendo que x ∈ ℝ⁺ ∕ {1}.",
+        passos: [
+          "A condição dada significa que a base do logaritmo é positiva e diferente de 1, como qualquer base de logaritmo deve ser.",
+          "Pela definição de logaritmo, logₓ 4 = 2 equivale a x² = 4.",
+          "De x² = 4 resulta x = 2 ou x = −2.",
+          "O valor −2 não serve, porque a base tem de ser positiva. Verificação: log₂ 4 = 2, porque 2² = 4."
+        ],
+        resposta: "x = 2"
+      },
+      {
+        numero: 6, cotacao: "1,5",
+        enunciado: "Sendo log₃ a + log₃ b = 2, calcule o valor de a × b.",
+        passos: [
+          "A soma de logaritmos com a mesma base é igual ao logaritmo do produto: log₃ a + log₃ b = log₃ (a × b).",
+          "A equação fica log₃ (a × b) = 2.",
+          "Pela definição de logaritmo: a × b = 3² = 9."
+        ],
+        resposta: "a × b = 9"
+      },
+      {
+        numero: 7, cotacao: "1,5",
+        enunciado: "Determine o valor de cos x, sabendo que 5 · sen x = 4 e x ∈ 1º Q (primeiro quadrante).",
+        passos: [
+          "De 5 · sen x = 4 vem sen x = 4/5.",
+          "Usa a relação fundamental da trigonometria: sen² x + cos² x = 1 → cos² x = 1 − (4/5)² = 1 − 16/25 = 9/25, logo cos x = ±3/5.",
+          "Como x está no 1º quadrante, o cosseno é positivo: fica o sinal +.",
+          "Verificação: (4/5)² + (3/5)² = 16/25 + 9/25 = 25/25 = 1."
+        ],
+        resposta: "cos x = 3/5"
+      },
+      {
+        numero: 8, cotacao: "1,5",
+        enunciado: "Calcule o valor de y na equação tg 3y = cotg (y/3), sabendo que os ângulos são complementares.",
+        passos: [
+          "Ângulos complementares somam 90°. Os ângulos da equação são 3y e y/3, por isso 3y + y/3 = 90°.",
+          "Multiplica tudo por 3: 9y + y = 270° → 10y = 270°.",
+          "Logo y = 270°/10 = 27°.",
+          "Verificação: 3y = 81° e y/3 = 9°; somam 90° e tg 81° = cotg 9°, tal como a equação pede."
+        ],
+        resposta: "y = 27°"
+      },
+      {
+        numero: 9, cotacao: "2,5",
+        enunciado: "Considere a função f(x) = 2ˣ + 2 e determine:\na) a equação da assímptota;\nb) a variação da função (monotonia). Justifique a resposta.",
+        passos: [
+          "a) Quando x toma valores negativos cada vez maiores, 2ˣ aproxima-se de 0 sem nunca o atingir (por exemplo, 2⁻¹⁰ ≈ 0,001). Assim, f(x) = 2ˣ + 2 aproxima-se de 2 sem nunca valer 2.",
+          "a) A recta y = 2 é, portanto, a assímptota horizontal da função.",
+          "b) A base da exponencial é 2, maior do que 1: quando x aumenta, 2ˣ também aumenta sempre. Somar 2 no fim não muda esse comportamento.",
+          "b) Confirma com valores: f(−1) = 2,5; f(0) = 3; f(1) = 4; f(2) = 6 — os valores crescem sempre que x cresce. A função é estritamente crescente em todo o ℝ."
+        ],
+        resposta: "a) Assímptota horizontal: y = 2  ·  b) Estritamente crescente em ℝ, porque a base 2 é maior que 1"
+      },
+      {
+        numero: 10, cotacao: "3,5",
+        enunciado: "Seja g(x) a função cujo gráfico está representado na figura (uma parábola com vértice no ponto (2, 1) e que passa pelos pontos (0, 5) e (4, 5)). Determine:\na) o contradomínio da função;\nb) a expressão analítica da função.",
+        passos: [
+          "Da figura lêem-se três informações-chave: o vértice da parábola é V(2, 1) e o gráfico passa pelos pontos (0, 5) e (4, 5).",
+          "a) A concavidade é para cima e o vértice é o ponto mais baixo: o menor valor da função é y = 1 e não há valor máximo. O contradomínio é [1, +∞[.",
+          "b) Usa a forma do vértice: g(x) = a(x − 2)² + 1.",
+          "b) Substitui o ponto (0, 5): 5 = a(0 − 2)² + 1 → 5 = 4a + 1 → 4a = 4 → a = 1.",
+          "b) Verificação com o outro ponto marcado na figura: g(4) = (4 − 2)² + 1 = 5, tal como o gráfico mostra."
+        ],
+        resposta: "a) CD(g) = [1, +∞[  ·  b) g(x) = (x − 2)² + 1 = x² − 4x + 5"
+      }
+    ]
   }
 ];
 
 // Exames em produção (aparecem na lista, ainda sem conteúdo)
 window.EM_BREVE = [
-  { disciplina: "Matemática", classe: "10ª Classe", ano: 2023, chamada: "1ª Chamada" },
   { disciplina: "Matemática", classe: "10ª Classe", ano: 2022, chamada: "1ª Chamada" },
   { disciplina: "Matemática", classe: "10ª Classe", ano: 2020, chamada: "1ª Chamada" },
   { disciplina: "Matemática", classe: "10ª Classe", ano: 2019, chamada: "1ª Época" },
