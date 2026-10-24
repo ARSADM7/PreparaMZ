@@ -10,7 +10,7 @@ const CONFIG = {
 // Versão visível da app (selo no rodapé, para distinguir a versão nova de
 // cópias antigas em cache). TEM de coincidir com o CACHE em sw.js
 // ("preparamz-v11") — os dois sobem sempre juntos.
-const VERSAO_APP = "v15";
+const VERSAO_APP = "v16";
 
 // Hashes SHA-256 dos códigos de desbloqueio (os códigos em claro ficam
 // no ficheiro privado do dono — nunca neste ficheiro público).
@@ -229,9 +229,9 @@ function vistaInicial() {
     <h2 class="titulo-seccao">Arquivo de exames originais (PDF oficial)</h2>
     <p class="aviso">Folhas de exame verdadeiras, digitalizadas (INEC/MINEDH), via arquivo público mozexames.com — 9ª e 10ª classes, todas as disciplinas, 2000–2025 (${totalArquivo()} exames verificados). São os enunciados oficiais, grátis. Escolhe a classe e a disciplina; toca num exame para leres o PDF sem sair da app.</p>
     <div id="arquivo"></div>
-    <h2 class="titulo-seccao">A caminho (2008–2025)</h2>
+    ${breve ? `<h2 class="titulo-seccao">A caminho (2008–2025)</h2>
     ${breve}
-    <p class="aviso">Novas resoluções entram todas as semanas, dos anos recentes para os mais antigos. Quem tem acesso completo recebe tudo sem pagar mais nesta época.</p>`;
+    <p class="aviso">Novas resoluções entram todas as semanas, dos anos recentes para os mais antigos. Quem tem acesso completo recebe tudo sem pagar mais nesta época.</p>` : `<p class="aviso">Matemática da 10ª classe está completa: todos os 34 exames do arquivo (2000–2025) têm resolução passo a passo. As resoluções das outras disciplinas entram a seguir, dos anos recentes para os mais antigos.</p>`}`;
   desenharArquivo();
 }
 
