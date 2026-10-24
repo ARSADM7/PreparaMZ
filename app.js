@@ -10,7 +10,7 @@ const CONFIG = {
 // Versão visível da app (selo no rodapé, para distinguir a versão nova de
 // cópias antigas em cache). TEM de coincidir com o CACHE em sw.js
 // ("preparamz-v11") — os dois sobem sempre juntos.
-const VERSAO_APP = "v13";
+const VERSAO_APP = "v14";
 
 // Hashes SHA-256 dos códigos de desbloqueio (os códigos em claro ficam
 // no ficheiro privado do dono — nunca neste ficheiro público).
