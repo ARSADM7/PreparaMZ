@@ -10,7 +10,7 @@ const CONFIG = {
 // Versão visível da app (selo no rodapé, para distinguir a versão nova de
 // cópias antigas em cache). TEM de coincidir com o CACHE em sw.js
 // ("preparamz-v11") — os dois sobem sempre juntos.
-const VERSAO_APP = "v18";
+const VERSAO_APP = "v19";
 
 // Hashes SHA-256 dos códigos de desbloqueio (os códigos em claro ficam
 // no ficheiro privado do dono — nunca neste ficheiro público).
@@ -231,7 +231,7 @@ function vistaInicial() {
     <div id="arquivo"></div>
     ${breve ? `<h2 class="titulo-seccao">A caminho (2008–2025)</h2>
     ${breve}
-    <p class="aviso">Novas resoluções entram todas as semanas, dos anos recentes para os mais antigos. Quem tem acesso completo recebe tudo sem pagar mais nesta época.</p>` : `<p class="aviso">Matemática da 10ª classe está completa: todos os 34 exames do arquivo (2000–2025) têm resolução passo a passo. Física já tem 8 exames resolvidos (2025–2019) e as restantes disciplinas entram a seguir, dos anos recentes para os mais antigos.</p>`}`;
+    <p class="aviso">Novas resoluções entram todas as semanas, dos anos recentes para os mais antigos. Quem tem acesso completo recebe tudo sem pagar mais nesta época.</p>` : `<p class="aviso">Matemática da 10ª classe está completa: todos os 34 exames do arquivo (2000–2025) têm resolução passo a passo. Física já tem 13 exames resolvidos (2025–2013) e as restantes disciplinas entram a seguir, dos anos recentes para os mais antigos.</p>`}`;
   desenharArquivo();
 }
 
