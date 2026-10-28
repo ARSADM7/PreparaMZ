@@ -198,3 +198,56 @@ button.cartao{font:inherit;color:inherit}
   .pdoc .figura{border:none;padding:2px 0;text-align:left}
   .pdoc .pfoot{margin-top:20px;font-size:9.5pt;color:#666;border-top:1px solid #ccc;padding-top:6px}
 }
+
+
+/* ===== Redesenho mobile-first: catálogo mais claro e pesquisa rápida ===== */
+@media screen {
+  html { scroll-behavior: smooth; }
+  main { max-width: 900px; padding: clamp(.8rem, 3vw, 1.4rem); }
+  .topo { -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); padding-inline: max(1rem, calc((100vw - 900px) / 2)); }
+  .logo { letter-spacing: -.04em; }
+  .faixa.hero-principal {
+    align-items: flex-start; gap: 1rem; padding: clamp(1.15rem, 4vw, 2rem);
+    border-color: rgba(125,177,242,.28);
+    background: radial-gradient(ellipse at 95% 0%, rgba(46,125,224,.24), transparent 55%), var(--vidro);
+  }
+  .hero-copy { min-width: 0; flex: 1 1 270px; }
+  .hero-principal .eyebrow { color: var(--azul-claro); font-size: .72rem; font-weight: 800; letter-spacing: .12em; margin-bottom: .45rem; }
+  .hero-principal h1 { color: #fff; font-size: clamp(1.55rem, 5vw, 2.2rem); line-height: 1.14; letter-spacing: -.035em; max-width: 19ch; margin-bottom: .65rem; }
+  .hero-desc { color: #c4d4eb; max-width: 54ch; font-size: .96rem; }
+  .hero-benefits { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .9rem; }
+  .hero-benefits span { display: inline-flex; align-items: center; gap: .25rem; border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.055); border-radius: 999px; padding: .3rem .55rem; font-size: .76rem; color: #e7effb; }
+  .hero-principal > .preco { align-self: flex-start; flex-shrink: 0; margin-top: .1rem; }
+  .catalogo-head { display: grid; gap: .7rem; margin: 1.5rem 0 1rem; }
+  .catalogo-head h2 { color: #fff; font-size: clamp(1.15rem, 3vw, 1.4rem); letter-spacing: -.02em; }
+  .catalogo-head > div > p { color: var(--suave); font-size: .9rem; margin-top: .15rem; }
+  .campo-pesquisa { display: flex; align-items: center; gap: .65rem; min-height: 52px; border: 1px solid rgba(157,180,212,.35); background: rgba(4,17,37,.65); border-radius: 13px; padding: 0 .9rem; color: var(--azul-claro); }
+  .campo-pesquisa > span { font-size: 1.55rem; line-height: 1; }
+  .campo-pesquisa input { width: 100%; min-width: 0; border: 0; outline: 0; background: transparent; color: var(--texto); font: inherit; font-size: 1rem; padding: .8rem 0; }
+  .campo-pesquisa input::placeholder { color: #8299b8; }
+  .campo-pesquisa:focus-within { border-color: var(--azul-claro); box-shadow: 0 0 0 3px rgba(46,125,224,.2); }
+  .sem-resultados { padding: .9rem 1rem; border: 1px dashed var(--linha); border-radius: 12px; color: var(--suave); }
+  .grupo-prontos { margin-bottom: 1.35rem; }
+  .grupo-prontos .titulo-seccao { display: flex; align-items: center; gap: .5rem; margin-top: 1rem; margin-bottom: .65rem; font-size: 1.02rem; }
+  .grupo-prontos .titulo-seccao::before { content: ""; width: 4px; height: 1.15em; border-radius: 5px; background: var(--azul); }
+  .cartao-exame { min-height: 68px; transition: border-color .15s ease, transform .15s ease, background .15s ease; }
+  .cartao-exame:hover { border-color: rgba(125,177,242,.48); }
+  .cartao-exame:focus-visible, .botao:focus-visible, .aba:focus-visible, .chip:focus-visible, .indice-num:focus-visible, .voltar:focus-visible { outline: 3px solid var(--amarelo); outline-offset: 3px; }
+  .botao, .aba, .chip, .indice-num { touch-action: manipulation; }
+  .botao { min-height: 44px; }
+  .rodape { max-width: 900px; }
+}
+@media screen and (max-width: 560px) {
+  .faixa.hero-principal { display: block; }
+  .hero-principal > .preco { display: inline-block; margin-top: 1rem; }
+  .hero-benefits span { font-size: .72rem; }
+  .cartao-exame { align-items: flex-start; }
+  .cartao-exame .selo { margin-top: .15rem; }
+  .barra-accao .botao { min-width: 100%; }
+  .indice { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .visor iframe { height: 65vh; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
+}
