@@ -204,8 +204,10 @@ function vistaInicial() {
     g.exames.push(e);
   }
   const prontos = gruposProntos.map(g => `
-    <h2 class="titulo-seccao">${esc(g.classe)} — exames resolvidos · pronto agora</h2>
-    ${g.exames.map(cartaoProntoHTML).join("")}`).join("");
+    <section class="grupo-prontos" data-classe="${esc(g.classe)}">
+      <h2 class="titulo-seccao">${esc(g.classe)} — exames resolvidos</h2>
+      ${g.exames.map(cartaoProntoHTML).join("")}
+    </section>`).join("");
   const breve = window.EM_BREVE.map(e => `
     <div class="cartao cartao-exame" style="cursor:default">
       <span><span class="nome">${esc(e.disciplina)} ${e.ano} — ${esc(e.chamada)}</span><br>
@@ -216,11 +218,21 @@ function vistaInicial() {
     ? `<a class="botao whats" href="https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(CONFIG.mensagemCompra)}" target="_blank" rel="noopener">💬 Comprar acesso no WhatsApp — ${CONFIG.preco}</a>`
     : "";
   app.innerHTML = `
-    <section class="faixa">
-      <h1>Exames de Moçambique resolvidos passo a passo</h1>
+    <section class="faixa hero-principal">
+      <div class="hero-copy">
+        <p class="eyebrow">PREPARAÇÃO PARA EXAMES</p>
+        <h1>Estuda com exames de Moçambique, passo a passo.</h1>
+        <p class="hero-desc">Abre o enunciado, tenta resolver cada pergunta e consulta a explicação quando precisares. Feito para estudar também no telemóvel.</p>
+        <div class="hero-benefits"><span>📄 Enunciados grátis</span><span>🧠 Resolução passo a passo</span><span>📱 Guarda o progresso</span></div>
+      </div>
       <span class="preco">Acesso completo: ${CONFIG.preco}</span>
     </section>
-    ${prontos}
+    <section class="catalogo-head" aria-labelledby="titulo-catalogo">
+      <div><h2 id="titulo-catalogo">Encontra o teu exame</h2><p>Pesquisa por disciplina, ano ou classe.</p></div>
+      <label class="campo-pesquisa"><span aria-hidden="true">⌕</span><input id="pesquisa-exames" type="search" placeholder="Ex.: Matemática 2024" autocomplete="off" aria-label="Pesquisar exames resolvidos" oninput="filtrarExamesProntos(this.value)"></label>
+      <p id="sem-resultados" class="sem-resultados" hidden>Não encontrei exames com esse termo. Experimenta outra disciplina ou ano.</p>
+    </section>
+    <div id="lista-prontos">${prontos}</div>
     <section class="cartao cartao-compra">
       <h2>🔓 Acesso completo — ${CONFIG.preco}</h2>
       <p>O enunciado de cada exame é <strong>grátis</strong>. Com o acesso completo desbloqueias, com um código, a resolução passo a passo de <strong>todos os exames</strong> — e o acesso fica guardado neste telemóvel.</p>
@@ -233,6 +245,29 @@ function vistaInicial() {
     ${breve}
     <p class="aviso">Novas resoluções entram todas as semanas, dos anos recentes para os mais antigos. Quem tem acesso completo recebe tudo sem pagar mais nesta época.</p>` : `<p class="aviso">Matemática da 10ª classe está completa: todos os 34 exames do arquivo (2000–2025) têm resolução passo a passo. Física já tem 25 exames resolvidos (2025–2005) e as restantes disciplinas entram a seguir, dos anos recentes para os mais antigos.</p>`}`;
   desenharArquivo();
+}
+
+
+// Pesquisa rápida no catálogo de exames resolvidos. Não altera os dados e
+// funciona localmente, sem pedir mais internet nem instalar bibliotecas.
+function filtrarExamesProntos(termo) {
+  const normalizar = valor => String(valor || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  const q = normalizar(termo).trim();
+  const grupos = document.querySelectorAll("#lista-prontos .grupo-prontos");
+  let total = 0;
+  grupos.forEach(grupo => {
+    const cartoes = grupo.querySelectorAll(".cartao-exame");
+    let visiveis = 0;
+    cartoes.forEach(cartao => {
+      const corresponde = !q || normalizar(cartao.textContent).includes(q);
+      cartao.hidden = !corresponde;
+      if (corresponde) visiveis++;
+    });
+    grupo.hidden = visiveis === 0;
+    total += visiveis;
+  });
+  const vazio = document.getElementById("sem-resultados");
+  if (vazio) vazio.hidden = total > 0;
 }
 
 // ---------- Arquivo de originais: filtros Classe → Disciplina → anos ----------
